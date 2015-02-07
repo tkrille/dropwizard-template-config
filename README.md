@@ -1,0 +1,1 @@
+# dropwizard-template-config
