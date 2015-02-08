@@ -27,9 +27,9 @@ public class TemplateConfigurationSourceProvider implements ConfigurationSourceP
         final Mustache mustache = new DefaultMustacheFactory()
                 .compile(new InputStreamReader(configurationTemplate), "configuration");
 
-        final Map<String, Object> scope = new HashMap<>(1);
+        final Map<String, Object> scope = new HashMap<>(2);
         scope.put("env", environmentProvider.getEnvironment());
-        // TODO: add system properties and other useful maps
+        scope.put("sys", System.getProperties());
 
         final String parsedConfiguration = mustache.execute(new StringWriter(), scope).toString();
 
