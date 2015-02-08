@@ -1,0 +1,14 @@
+---
+
+server:
+  applicationConnectors:
+    - type: http
+      port: {{ env.APP_PORT }}
+  adminConnectors:
+    - type: http
+      port: {{ env.ADMIN_PORT }}
+
+logging:
+  level: {{ env.LOG_LEVEL }}
+  appenders:
+    - type: console
