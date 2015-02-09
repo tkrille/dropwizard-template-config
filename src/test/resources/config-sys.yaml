@@ -3,12 +3,12 @@
 server:
   applicationConnectors:
     - type: http
-      port: {{ sys.app_port }}
+      port: ${sys.app_port}
   adminConnectors:
     - type: http
-      port: {{ sys.admin_port }}
+      port: ${sys.admin_port}
 
 logging:
-  level: {{ sys.log_level }}
+  level: ${sys.log_level}
   appenders:
     - type: console

@@ -4,14 +4,18 @@ import java.io.*;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.github.mustachejava.DefaultMustacheFactory;
-import com.github.mustachejava.Mustache;
+import com.google.common.base.Throwables;
+
+import freemarker.template.Configuration;
+import freemarker.template.Template;
+import freemarker.template.TemplateException;
+import freemarker.template.TemplateExceptionHandler;
 import io.dropwizard.configuration.ConfigurationSourceProvider;
 
 public class TemplateConfigurationSourceProvider implements ConfigurationSourceProvider {
 
-    private final ConfigurationSourceProvider parentProvider;
-    private final EnvironmentProvider environmentProvider;
+    private ConfigurationSourceProvider parentProvider;
+    private EnvironmentProvider environmentProvider;
 
     public TemplateConfigurationSourceProvider(final ConfigurationSourceProvider parentProvider,
             final EnvironmentProvider environmentProvider) {
@@ -22,17 +26,27 @@ public class TemplateConfigurationSourceProvider implements ConfigurationSourceP
 
     @Override
     public InputStream open(final String path) throws IOException {
-        final InputStream configurationTemplate = parentProvider.open(path);
+        try {
+            Configuration configuration = new Configuration(Configuration.VERSION_2_3_21);
+            // configuration.setDefaultEncoding("UTF-8");
+            configuration.setTemplateExceptionHandler(TemplateExceptionHandler.RETHROW_HANDLER);
 
-        final Mustache mustache = new DefaultMustacheFactory()
-                .compile(new InputStreamReader(configurationTemplate), "configuration");
+            Map<String, Object> dataModel = new HashMap<>(2);
+            dataModel.put("env", environmentProvider.getEnvironment());
+            dataModel.put("sys", System.getProperties());
 
-        final Map<String, Object> scope = new HashMap<>(2);
-        scope.put("env", environmentProvider.getEnvironment());
-        scope.put("sys", System.getProperties());
+            ByteArrayOutputStream processedTemplateStream = new ByteArrayOutputStream();
+            Reader configTemplate = new InputStreamReader(parentProvider.open(path));
 
-        final String parsedConfiguration = mustache.execute(new StringWriter(), scope).toString();
+            new Template("config", configTemplate, configuration)
+                    .process(dataModel, new OutputStreamWriter(processedTemplateStream));
 
-        return new ByteArrayInputStream(parsedConfiguration.getBytes());
+            return new ByteArrayInputStream(processedTemplateStream.toByteArray());
+        } catch (TemplateException e) {
+            throw Throwables.propagate(e);
+        } finally {
+            parentProvider = null;
+            environmentProvider = null;
+        }
     }
 }
