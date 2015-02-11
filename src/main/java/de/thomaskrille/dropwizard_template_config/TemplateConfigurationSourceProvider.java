@@ -14,14 +14,17 @@ import io.dropwizard.configuration.ConfigurationSourceProvider;
 
 public class TemplateConfigurationSourceProvider implements ConfigurationSourceProvider {
 
+    private SystemPropertiesProvider systemPropertiesProvider;
     private ConfigurationSourceProvider parentProvider;
     private EnvironmentProvider environmentProvider;
 
     public TemplateConfigurationSourceProvider(final ConfigurationSourceProvider parentProvider,
-            final EnvironmentProvider environmentProvider) {
+            final EnvironmentProvider environmentProvider,
+            final SystemPropertiesProvider systemPropertiesProvider) {
 
         this.parentProvider = parentProvider;
         this.environmentProvider = environmentProvider;
+        this.systemPropertiesProvider = systemPropertiesProvider;
     }
 
     @Override
@@ -33,7 +36,7 @@ public class TemplateConfigurationSourceProvider implements ConfigurationSourceP
 
             Map<String, Object> dataModel = new HashMap<>(2);
             dataModel.put("env", environmentProvider.getEnvironment());
-            dataModel.put("sys", System.getProperties());
+            dataModel.put("sys", systemPropertiesProvider.getSystemProperties());
 
             ByteArrayOutputStream processedTemplateStream = new ByteArrayOutputStream();
             Reader configTemplate = new InputStreamReader(parentProvider.open(path));
@@ -47,6 +50,7 @@ public class TemplateConfigurationSourceProvider implements ConfigurationSourceP
         } finally {
             parentProvider = null;
             environmentProvider = null;
+            systemPropertiesProvider = null;
         }
     }
 }

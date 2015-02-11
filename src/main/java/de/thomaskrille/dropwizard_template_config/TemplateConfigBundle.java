@@ -11,7 +11,8 @@ public class TemplateConfigBundle implements Bundle {
     public void initialize(final Bootstrap<?> bootstrap) {
         final ConfigurationSourceProvider configurationSourceProvider = new TemplateConfigurationSourceProvider(
                 bootstrap.getConfigurationSourceProvider(),
-                new DefaultEnvironmentProvider());
+                new DefaultEnvironmentProvider(),
+                new DefaultSystemPropertiesProvider());
 
         bootstrap.setConfigurationSourceProvider(configurationSourceProvider);
     }
