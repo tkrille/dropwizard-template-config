@@ -4,13 +4,13 @@
 
     <groupId>de.thomaskrille</groupId>
     <artifactId>dropwizard-template-config</artifactId>
-    <version>1.0.0-SNAPSHOT</version>
+    <version>0.1.0-SNAPSHOT</version>
+
     <name>Dropwizard Template Configuration</name>
     <description>
         Dropwizard bundle that enables you to write your config.yaml as a template.
     </description>
     <url>https://github.com/tkrille/dropwizard-template-config</url>
-
     <licenses>
         <license>
             <name>The Apache Software License, Version 2.0</name>
@@ -31,12 +31,10 @@
         <url>https://github.com/tkrille/dropwizard-template-config</url>
         <tag>HEAD</tag>
     </scm>
-
     <issueManagement>
         <system>GitHub</system>
         <url>https://github.com/tkrille/dropwizard-template-config/issues</url>
     </issueManagement>
-
     <distributionManagement>
         <snapshotRepository>
             <id>ossrh</id>
@@ -244,6 +242,22 @@
             <id>release</id>
             <build>
                 <plugins>
+                    <plugin>
+                        <artifactId>maven-shade-plugin</artifactId>
+                        <version>2.3</version>
+                        <executions>
+                            <execution>
+                                <id>shade-3rd-party-deps</id>
+                                <goals>
+                                    <goal>shade</goal>
+                                </goals>
+                                <configuration>
+                                    <createSourcesJar>true</createSourcesJar>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+
                     <plugin>
                         <artifactId>maven-source-plugin</artifactId>
                         <version>2.3</version>
