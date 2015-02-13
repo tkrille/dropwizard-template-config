@@ -3,7 +3,7 @@
 
     <groupId>de.thomaskrille</groupId>
     <artifactId>dropwizard-template-config</artifactId>
-    <version>1.0.0</version>
+    <version>1.0.1-SNAPSHOT</version>
 
     <name>Dropwizard Template Configuration</name>
     <description>
@@ -28,7 +28,7 @@
         <connection>https://github.com/tkrille/dropwizard-template-config.git</connection>
         <developerConnection>scm:git:git@github.com:tkrille/dropwizard-template-config.git</developerConnection>
         <url>https://github.com/tkrille/dropwizard-template-config</url>
-        <tag>v1.0.0</tag>
+        <tag>HEAD</tag>
     </scm>
     <issueManagement>
         <system>GitHub</system>
