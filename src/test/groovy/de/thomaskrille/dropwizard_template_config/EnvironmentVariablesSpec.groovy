@@ -1,5 +1,6 @@
 package de.thomaskrille.dropwizard_template_config
 
+import com.google.common.io.CharStreams
 import org.apache.commons.io.IOUtils
 import spock.lang.Specification
 
@@ -18,10 +19,10 @@ class EnvironmentVariablesSpec extends Specification {
     def 'replacing an environment variable works'() throws Exception {
         given:
         def config = '''server:
-                             type: simple
-                             connector:
-                               type: http
-                               port: ${env.PORT}'''
+                          type: simple
+                          connector:
+                            type: http
+                            port: ${env.PORT}'''
 
         environmentProvider.put('PORT', '8080')
 
@@ -38,10 +39,10 @@ class EnvironmentVariablesSpec extends Specification {
     def 'using a missing environment variable honors default value'() throws Exception {
         given:
         def config = '''server:
-                             type: simple
-                             connector:
-                               type: http
-                               port: ${env.PORT!'8080'}'''
+                          type: simple
+                          connector:
+                            type: http
+                            port: ${env.PORT!'8080'}'''
 
         when:
         InputStream parsedConfig = templateConfigurationSourceProvider.open(config)
@@ -56,10 +57,10 @@ class EnvironmentVariablesSpec extends Specification {
     def 'using a missing environment variable without default value fails'() throws Exception {
         given:
         def config = '''server:
-                             type: simple
-                             connector:
-                               type: http
-                               port: ${env.PORT}'''
+                          type: simple
+                          connector:
+                            type: http
+                            port: ${env.PORT}'''
 
         when:
         templateConfigurationSourceProvider.open(config)

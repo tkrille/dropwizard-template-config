@@ -40,11 +40,11 @@ server:
   type: simple
   connector:
     type: http
+    # replacing environment variables
     port: ${env.PORT}
 logging:
+  # with default values too
   level: ${env.LOG_LEVEL!'WARN'}
-  loggers:
-    com.example.my_app: ${env.LOG_LEVEL_APP!'INFO'}
   appenders:
     - type: console
 ```
