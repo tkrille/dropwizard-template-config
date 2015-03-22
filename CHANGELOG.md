@@ -2,6 +2,13 @@
 
 ## Unreleased
 
+### Features
+
+- make encoding of configuration template and output configurable
+
+    see https://github.com/tkrille/dropwizard-template-config#setup for how to
+    configure this.
+
 ### Fixes
 
 - default number format not suitable for YAML output
@@ -12,6 +19,7 @@
 ### Changes
 
 - bump Freemarker to 2.3.22
+- use `UTF-8` as default encoding for configuration templates
 
 ## 1.0.0 (2015-02-13)
 

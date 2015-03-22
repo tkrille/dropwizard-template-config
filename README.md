@@ -30,6 +30,26 @@ public void initialize(final Bootstrap<Configuration> bootstrap) {
 }
 ```
 
+This `Bundle` assumes `UTF-8` as the default encoding for configuration
+templates. You can change this when creating a new instance:
+
+```java
+@Override
+public void initialize(final Bootstrap<Configuration> bootstrap) {
+    ...
+    bootstrap.addBundle(new TemplateConfigBundle(Charsets.UTF_16));
+    ...
+}
+```
+
+The constructor takes any `java.nio.charset.Charset` instance. Use
+`com.google.common.base.Charsets` for some predefined values.
+
+**Heads up:** The Bundle gets the content of the `config.yaml` by wrapping any
+previously defined `io.dropwizard.configuration.ConfigurationSourceProvider`.
+So you must set any custom `ConfigurationSourceProvider` before adding
+this `Bundle` to the `Bootstrap`.
+
 ## Quickstart
 
 Environment variables and system properties can be specified in `config.yaml`
@@ -46,7 +66,8 @@ logging:
   # with default values too
   level: ${env.LOG_LEVEL!'WARN'}
   appenders:
-    - type: console
+    # system properties also work
+    - type: ${sys.log_appender!'console'}
 ```
 
 See [Freemarker's Template Author's Guide]
@@ -206,6 +227,10 @@ logging:
 Be careful to not overuse all this stuff. In the end, a configuration file
 should stay as simple as possible and be easily readable. Extensively using
 advanced Freemarker features might get in the way of this principle.
+
+See [Freemarker's Template Author's Guide]
+(http://freemarker.org/docs/dgui.html) for more information on how to
+write templates.
 
 ## Migration from Dropwizard Environment Config
 

@@ -1,5 +1,6 @@
 package de.thomaskrille.dropwizard_template_config
 
+import com.google.common.base.Charsets
 import org.apache.commons.io.IOUtils
 import spock.lang.Specification
 
@@ -14,7 +15,8 @@ class SystemPropertiesSpec extends Specification {
     def TemplateConfigurationSourceProvider templateConfigurationSourceProvider =
             new TemplateConfigurationSourceProvider(new TestConfigSourceProvider(),
                     new DefaultEnvironmentProvider(),
-                    systemPropertiesProvider)
+                    systemPropertiesProvider,
+                    Charsets.UTF_8)
 
     def 'replacing a system property works'() throws Exception {
         given:
