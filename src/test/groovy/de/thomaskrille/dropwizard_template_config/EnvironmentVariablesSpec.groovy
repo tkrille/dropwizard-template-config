@@ -1,5 +1,6 @@
 package de.thomaskrille.dropwizard_template_config
 
+import com.google.common.base.Charsets
 import com.google.common.io.CharStreams
 import org.apache.commons.io.IOUtils
 import spock.lang.Specification
@@ -14,7 +15,8 @@ class EnvironmentVariablesSpec extends Specification {
     def TemplateConfigurationSourceProvider templateConfigurationSourceProvider =
             new TemplateConfigurationSourceProvider(new TestConfigSourceProvider(),
                     environmentProvider,
-                    new DefaultSystemPropertiesProvider())
+                    new DefaultSystemPropertiesProvider(),
+                    Charsets.UTF_8)
 
     def 'replacing an environment variable works'() throws Exception {
         given:
