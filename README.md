@@ -14,7 +14,7 @@ First add the dependency to your POM:
 <dependency>
     <groupId>de.thomaskrille</groupId>
     <artifactId>dropwizard-template-config</artifactId>
-    <version>1.0.0</version>
+    <version>1.1.0</version>
 </dependency>
 ```
 
