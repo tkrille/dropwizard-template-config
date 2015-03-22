@@ -6,10 +6,7 @@ import java.util.Map;
 
 import com.google.common.base.Throwables;
 
-import freemarker.template.Configuration;
-import freemarker.template.Template;
-import freemarker.template.TemplateException;
-import freemarker.template.TemplateExceptionHandler;
+import freemarker.template.*;
 import io.dropwizard.configuration.ConfigurationSourceProvider;
 
 public class TemplateConfigurationSourceProvider implements ConfigurationSourceProvider {
@@ -30,7 +27,7 @@ public class TemplateConfigurationSourceProvider implements ConfigurationSourceP
     @Override
     public InputStream open(final String path) throws IOException {
         try {
-            Configuration configuration = new Configuration(Configuration.VERSION_2_3_21);
+            Configuration configuration = new Configuration(Configuration.VERSION_2_3_22);
             configuration.setTemplateExceptionHandler(TemplateExceptionHandler.RETHROW_HANDLER);
             configuration.setNumberFormat("computer");
 
