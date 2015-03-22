@@ -80,15 +80,13 @@ server:
   type: simple
   connector:
     type: http
-    port: ${env.PORT!'8080'}
+    port: ${env.PORT!8080}
 ```
 
 Default values are separated from the variable name by a `!` and follow more or
 less the well-known Java syntax for scalars. If there is no default value for
-a missing variable an exception will be thrown by Freemarker. Note that you
-have to specify any number as a `String`, otherwise it would be formatted
-based on your locale or other environment settings. This will be fixed soon in
-an upcoming release.
+a missing variable an exception will be thrown by Freemarker and wrapped in
+a `RuntimeException`.
 
 Not only environment variables, but system properties are available, too:
 
@@ -108,7 +106,7 @@ server:
   type: simple
   connector:
     type: http
-    port: ${sys.http_port!'8080'}
+    port: ${sys.http_port!8080}
 ```
 
 You can even use properties with a `.` in their name:
@@ -170,10 +168,10 @@ any other Freemarker features beyond simple variable interpolation:
 server:
   applicationConnectors:
     - type: http
-      port: ${env.PORT!'8080'}
+      port: ${env.PORT!8080}
 <#if env.ENABLE_SSL == 'true'>
     - type: https
-      port: ${env.SSL_PORT!'8443'}
+      port: ${env.SSL_PORT!8443}
       keyStorePath: ${env.SSL_KEYSTORE_PATH}
       keyStorePassword: ${env.SSL_KEYSTORE_PASS}
 </#if>

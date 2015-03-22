@@ -42,7 +42,7 @@ class EnvironmentVariablesSpec extends Specification {
                           type: simple
                           connector:
                             type: http
-                            port: ${env.PORT!'8080'}'''
+                            port: ${env.PORT!8080}'''
 
         when:
         InputStream parsedConfig = templateConfigurationSourceProvider.open(config)

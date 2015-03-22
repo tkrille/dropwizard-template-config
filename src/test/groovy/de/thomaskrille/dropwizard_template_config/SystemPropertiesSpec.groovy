@@ -42,7 +42,7 @@ class SystemPropertiesSpec extends Specification {
                           type: simple
                           connector:
                             type: http
-                            port: ${sys.http_port!'8080'}'''
+                            port: ${sys.http_port!8080}'''
 
         when:
         def parsedConfig = templateConfigurationSourceProvider.open(config)

@@ -20,10 +20,10 @@ class AdditionalFreemarkerFeaturesSpec extends Specification {
                 server:
                   applicationConnectors:
                     - type: http
-                      port: ${env.PORT!'8080'}
+                      port: ${env.PORT!8080}
                 <#if env.ENABLE_SSL == 'true'>
                     - type: https
-                      port: ${env.SSL_PORT!'8443'}
+                      port: ${env.SSL_PORT!8443}
                       keyStorePath: ${env.SSL_KEYSTORE_PATH}
                       keyStorePassword: ${env.SSL_KEYSTORE_PASS}
                 </#if>
@@ -52,10 +52,10 @@ class AdditionalFreemarkerFeaturesSpec extends Specification {
                 server:
                   applicationConnectors:
                     - type: http
-                      port: ${env.PORT!'8080'}
+                      port: ${env.PORT!8080}
                 <#if env.ENABLE_SSL == 'true'>
                     - type: https
-                      port: ${env.SSL_PORT!'8443'}
+                      port: ${env.SSL_PORT!8443}
                       keyStorePath: ${env.SSL_KEYSTORE_PATH}
                       keyStorePassword: ${env.SSL_KEYSTORE_PASS}
                 </#if>

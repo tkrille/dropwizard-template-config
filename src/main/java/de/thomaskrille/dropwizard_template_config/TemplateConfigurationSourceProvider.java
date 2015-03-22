@@ -31,8 +31,8 @@ public class TemplateConfigurationSourceProvider implements ConfigurationSourceP
     public InputStream open(final String path) throws IOException {
         try {
             Configuration configuration = new Configuration(Configuration.VERSION_2_3_21);
-            // configuration.setDefaultEncoding("UTF-8");
             configuration.setTemplateExceptionHandler(TemplateExceptionHandler.RETHROW_HANDLER);
+            configuration.setNumberFormat("computer");
 
             Map<String, Object> dataModel = new HashMap<>(2);
             dataModel.put("env", environmentProvider.getEnvironment());
