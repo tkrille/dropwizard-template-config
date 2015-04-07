@@ -247,11 +247,12 @@ and uses the following 3rd party software
 
 - Dropwizard
 
-    Copyright 2010-2015, Coda Hale, Yammer, Inc.
+    Copyright 2010-2015, Coda Hale, Yammer Inc.
 
 - Freemarker
 
-    Copyright ????, ??? ??? ???
+    Copyright 2002-2015, The FreeMarker Project, Attila Szegedi, Daniel Dekany,
+    Jonathan Revusky
 
 
 See LICENSE-3RD-PARTY and NOTICE-3RD-PARTY for the individual 3rd parties.
