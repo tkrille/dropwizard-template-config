@@ -1,6 +1,5 @@
 package de.thomaskrille.dropwizard_template_config;
 
-import com.google.common.base.Charsets;
 import io.dropwizard.Bundle;
 import io.dropwizard.configuration.ConfigurationSourceProvider;
 import io.dropwizard.setup.Bootstrap;
@@ -20,28 +19,30 @@ public class TemplateConfigBundle implements Bundle {
     private final Charset charset;
 
     /**
-     * Creates a new {@link TemplateConfigBundle} using UTF-8 as the {@link Charset}.
-     *
-     * <p>
-     * The {@link Charset} is used to load, process, and output the config template.
-     * </p>
+     * Create a {@link TemplateConfigBundle} using the default configuration.
      */
     public TemplateConfigBundle() {
-        this(Charsets.UTF_8);
+        this(new TemplateConfigBundleConfiguration());
     }
 
     /**
-     * Creates a new {@link TemplateConfigBundle} using the given {@link Charset}.
+     * Create a {@link TemplateConfigBundle} using the given {@link Charset}.
      *
-     * <p>
-     * The {@link Charset} is used to load, process, and output the config template.
-     * </p>
-     *
-     * @param charset
-     *        The {@link Charset} used to load, process, and output the config template.
+     * @param charset The {@link Charset} used to load, process, and output the config template.
+     * @deprecated Use {@link TemplateConfigBundle#TemplateConfigBundle(TemplateConfigBundleConfiguration)} instead.
      */
+    @Deprecated
     public TemplateConfigBundle(final Charset charset) {
         this.charset = charset;
+    }
+
+    /**
+     * Create a {@link TemplateConfigBundle} using the given {@link TemplateConfigBundleConfiguration}.
+     *
+     * @param configuration The configuration for the new bundle. See {@link TemplateConfigBundleConfiguration}.
+     */
+    public TemplateConfigBundle(final TemplateConfigBundleConfiguration configuration) {
+        this.charset = configuration.charset();
     }
 
     @Override
