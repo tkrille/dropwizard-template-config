@@ -30,20 +30,20 @@ public void initialize(final Bootstrap<Configuration> bootstrap) {
 }
 ```
 
-This `Bundle` assumes `UTF-8` as the default encoding for configuration
-templates. You can change this when creating a new instance:
+You can configure the bundle by passing an instance of `TemplateConfigBundleConfiguration` to the constructor:
 
 ```java
 @Override
 public void initialize(final Bootstrap<Configuration> bootstrap) {
     ...
-    bootstrap.addBundle(new TemplateConfigBundle(Charsets.UTF_16));
+    bootstrap.addBundle(new TemplateConfigBundle(
+            new TemplateConfigBundleConfiguration().charset(Charsets.US_ASCII)
+    ));
     ...
 }
 ```
 
-The constructor takes any `java.nio.charset.Charset` instance. Use
-`com.google.common.base.Charsets` for some predefined values.
+Look at `TemplateConfigBundleConfiguration`'s javadoc to see all available options.
 
 **Heads up:** The Bundle gets the content of the `config.yaml` by wrapping any
 previously defined `io.dropwizard.configuration.ConfigurationSourceProvider`.
