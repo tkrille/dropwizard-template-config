@@ -224,6 +224,76 @@ logging:
 </#if>
 ```
 
+Since 1.2.0, you can include config file snippets from the classpath.
+For this to work you have to set a path under the classpath as the include directory:
+
+```java
+@Override
+public void initialize(final Bootstrap<Configuration> bootstrap) {
+    ...
+    bootstrap.addBundle(new TemplateConfigBundle(
+            new TemplateConfigBundleConfiguration().includePath("/config")
+    ));
+    ...
+}
+```
+
+Config file snippets will be read from this directory.
+You can also use sub-folders to organize your configurations.
+The include path is absolute.
+Relative paths will be made absolute by prepending a slash (`/`).
+
+You can then include configuration templates from other files.
+To extract the database config, for example, create a config like this:
+
+```yaml
+server:
+  type: simple
+  connector:
+    type: http
+    port: 8080
+
+<#include "database.yaml">
+
+logging:
+  level: WARN
+```
+
+The `database.yaml` looks like this:
+
+```yaml
+database:
+  driverClass: org.postgresql.Driver
+  user: my-app
+  password: secret
+  url: jdbc:postgresql://localhost:5432/my-app-db
+```
+
+The result will look like this:
+
+```yaml
+server:
+  type: simple
+  connector:
+    type: http
+    port: 8080
+
+database:
+  driverClass: org.postgresql.Driver
+  user: my-app
+  password: secret
+  url: jdbc:postgresql://localhost:5432/my-app-db
+
+logging:
+  level: WARN
+```
+
+Of course, you can also use any templating feature in the included file, like:
+
+- accessing environment variables
+- using conditionals
+- including additional files
+
 Be careful to not overuse all this stuff. In the end, a configuration file
 should stay as simple as possible and be easily readable. Extensively using
 advanced Freemarker features might get in the way of this principle.

@@ -1,6 +1,7 @@
 package de.thomaskrille.dropwizard_template_config
 
 import com.google.common.base.Charsets
+import com.google.common.base.Optional
 import org.apache.commons.io.IOUtils
 import spock.lang.Specification
 
@@ -14,7 +15,7 @@ class AdvancedInterpolationSpec extends Specification {
             new TemplateConfigurationSourceProvider(new TestConfigSourceProvider(),
                     environmentProvider,
                     new DefaultSystemPropertiesProvider(),
-                    Charsets.UTF_8)
+                    Charsets.UTF_8, Optional.absent())
 
     def 'replacing an environment variable inline works'() {
         given:

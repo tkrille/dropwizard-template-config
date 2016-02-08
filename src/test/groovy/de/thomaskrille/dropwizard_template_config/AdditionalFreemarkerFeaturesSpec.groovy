@@ -1,10 +1,9 @@
 package de.thomaskrille.dropwizard_template_config
 
 import com.google.common.base.Charsets
+import com.google.common.base.Optional
 import org.apache.commons.io.IOUtils
 import spock.lang.Specification
-
-import java.nio.charset.Charset
 
 import static org.hamcrest.CoreMatchers.containsString
 
@@ -12,13 +11,11 @@ class AdditionalFreemarkerFeaturesSpec extends Specification {
 
     def TestEnvironmentProvider environmentProvider = new TestEnvironmentProvider()
 
-    def bundle = new TemplateConfigBundle(Charsets.UTF_16)
-
     def TemplateConfigurationSourceProvider templateConfigurationSourceProvider =
             new TemplateConfigurationSourceProvider(new TestConfigSourceProvider(),
                     environmentProvider,
                     new DefaultSystemPropertiesProvider(),
-                    Charsets.UTF_8)
+                    Charsets.UTF_8, Optional.absent())
 
     def 'conditionally enable https - on'() {
         given:

@@ -1,5 +1,6 @@
 package de.thomaskrille.dropwizard_template_config;
 
+import com.google.common.base.Optional;
 import io.dropwizard.Bundle;
 import io.dropwizard.configuration.ConfigurationSourceProvider;
 import io.dropwizard.setup.Bootstrap;
@@ -17,6 +18,7 @@ import java.nio.charset.Charset;
 public class TemplateConfigBundle implements Bundle {
 
     private final Charset charset;
+    private final Optional<String> includePath;
 
     /**
      * Create a {@link TemplateConfigBundle} using the default configuration.
@@ -33,7 +35,7 @@ public class TemplateConfigBundle implements Bundle {
      */
     @Deprecated
     public TemplateConfigBundle(final Charset charset) {
-        this.charset = charset;
+        this(new TemplateConfigBundleConfiguration().charset(charset));
     }
 
     /**
@@ -42,18 +44,16 @@ public class TemplateConfigBundle implements Bundle {
      * @param configuration The configuration for the new bundle. See {@link TemplateConfigBundleConfiguration}.
      */
     public TemplateConfigBundle(final TemplateConfigBundleConfiguration configuration) {
-        this.charset = configuration.charset();
+        charset = configuration.charset();
+        includePath = configuration.includePath();
     }
 
     @Override
     public void initialize(final Bootstrap<?> bootstrap) {
-        final ConfigurationSourceProvider configurationSourceProvider = new TemplateConfigurationSourceProvider(
-                bootstrap.getConfigurationSourceProvider(),
-                new DefaultEnvironmentProvider(),
-                new DefaultSystemPropertiesProvider(),
-                charset);
-
-        bootstrap.setConfigurationSourceProvider(configurationSourceProvider);
+        bootstrap.setConfigurationSourceProvider(new TemplateConfigurationSourceProvider(
+                bootstrap.getConfigurationSourceProvider(), new DefaultEnvironmentProvider(),
+                new DefaultSystemPropertiesProvider(), charset, includePath
+        ));
     }
 
     @Override

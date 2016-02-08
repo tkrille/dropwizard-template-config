@@ -1,0 +1,5 @@
+database:
+  driverClass: org.postgresql.Driver
+  user: ${env.DB_USER}
+  password: ${env.DB_PASSWORD}
+  url: jdbc:postgresql://${env.DB_HOST}:${env.DB_PORT}/my-app-db

@@ -1,0 +1,5 @@
+database:
+  driverClass: org.postgresql.Driver
+  user: my-app
+  password: secret
+  url: jdbc:postgresql://localhost:5432/my-app-db

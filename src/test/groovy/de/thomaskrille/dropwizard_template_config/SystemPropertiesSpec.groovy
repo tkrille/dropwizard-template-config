@@ -1,12 +1,12 @@
 package de.thomaskrille.dropwizard_template_config
 
 import com.google.common.base.Charsets
+import com.google.common.base.Optional
 import org.apache.commons.io.IOUtils
 import spock.lang.Specification
 
 import static org.hamcrest.CoreMatchers.containsString
 import static org.hamcrest.CoreMatchers.isA
-import static org.junit.Assert.assertThat
 
 class SystemPropertiesSpec extends Specification {
 
@@ -16,7 +16,7 @@ class SystemPropertiesSpec extends Specification {
             new TemplateConfigurationSourceProvider(new TestConfigSourceProvider(),
                     new DefaultEnvironmentProvider(),
                     systemPropertiesProvider,
-                    Charsets.UTF_8)
+                    Charsets.UTF_8, Optional.absent())
 
     def 'replacing a system property works'() throws Exception {
         given:

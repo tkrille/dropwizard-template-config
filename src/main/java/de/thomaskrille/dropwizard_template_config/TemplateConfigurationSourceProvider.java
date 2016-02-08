@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.google.common.base.Charsets;
+import com.google.common.base.Optional;
 import com.google.common.base.Throwables;
 
 import freemarker.template.*;
@@ -14,6 +15,7 @@ import io.dropwizard.configuration.ConfigurationSourceProvider;
 public class TemplateConfigurationSourceProvider implements ConfigurationSourceProvider {
 
     private final Charset charset;
+    private final Optional<String> includePath;
     private final SystemPropertiesProvider systemPropertiesProvider;
     private final ConfigurationSourceProvider parentProvider;
     private final EnvironmentProvider environmentProvider;
@@ -27,18 +29,19 @@ public class TemplateConfigurationSourceProvider implements ConfigurationSourceP
                                                final EnvironmentProvider environmentProvider,
                                                final SystemPropertiesProvider systemPropertiesProvider) {
 
-        this(parentProvider, environmentProvider, systemPropertiesProvider, Charsets.UTF_8);
+        this(parentProvider, environmentProvider, systemPropertiesProvider, Charsets.UTF_8, Optional.<String>absent());
     }
 
     TemplateConfigurationSourceProvider(final ConfigurationSourceProvider parentProvider,
-            final EnvironmentProvider environmentProvider,
-            final SystemPropertiesProvider systemPropertiesProvider,
-            final Charset charset) {
+                                        final EnvironmentProvider environmentProvider,
+                                        final SystemPropertiesProvider systemPropertiesProvider,
+                                        final Charset charset, Optional<String> includePath) {
 
         this.parentProvider = parentProvider;
         this.environmentProvider = environmentProvider;
         this.systemPropertiesProvider = systemPropertiesProvider;
         this.charset = charset;
+        this.includePath = includePath;
     }
 
     @Override
@@ -48,6 +51,14 @@ public class TemplateConfigurationSourceProvider implements ConfigurationSourceP
             configuration.setTemplateExceptionHandler(TemplateExceptionHandler.RETHROW_HANDLER);
             configuration.setNumberFormat("computer");
             configuration.setDefaultEncoding(charset.name());
+
+            if(includePath.isPresent()) {
+                String includePath = this.includePath.get();
+                if(!includePath.startsWith("/")) {
+                    includePath = "/" + includePath;
+                }
+                configuration.setClassForTemplateLoading(getClass(), includePath);
+            }
 
             Map<String, Object> dataModel = new HashMap<>(2);
             dataModel.put("env", environmentProvider.getEnvironment());

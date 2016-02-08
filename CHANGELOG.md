@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.2.0
+
+### Features
+
+- Allow inclusion of config snippets from classpath
+
+    See the [tutorial](README.md#tutorial) for details.
+
 ## 1.1.0 (2015-03-22)
 
 ### Features
