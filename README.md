@@ -1,4 +1,4 @@
-# Dropwizard Template Config
+# Dropwizard Template Config [![Circle CI](https://circleci.com/gh/tkrille/dropwizard-template-config/tree/master.svg?style=svg)](https://circleci.com/gh/tkrille/dropwizard-template-config/tree/master)
 
 A Dropwizard Bundle that allows you to write your `config.yaml` as a
 [Freemarker](http://freemarker.org) template. This is especially useful when you
