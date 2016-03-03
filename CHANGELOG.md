@@ -1,12 +1,26 @@
 # Changelog
 
-## 1.2.0
+## 1.2.0 (2016-03-03)
 
 ### Features
 
-- Allow inclusion of config snippets from classpath
+- Allow inclusion of config snippets from classpath. See the
+  [tutorial](README.md#tutorial) for details.
 
-    See the [tutorial](README.md#tutorial) for details.
+### Changes
+
+- Configuration of the bundle now uses a new configuration class. The
+  former API has been deprecated. Please, update your code. See
+  [the docs](https://github.com/tkrille/dropwizard-template-config#setup)
+  for further details.
+
+- Compile against Dropwizard 0.9.2
+
+### Deprecations
+
+- Constructor `TemplateConfigBundle(final Charset charset)` has been
+  replaced with the new configuration means. It will be removed in
+  1.5.0 or 2.0.0.
 
 ## 1.1.0 (2015-03-22)
 
