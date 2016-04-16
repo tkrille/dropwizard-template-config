@@ -5,7 +5,7 @@ import com.google.common.base.Optional
 import org.apache.commons.io.IOUtils
 import spock.lang.Specification
 
-import static org.hamcrest.CoreMatchers.containsString
+import static org.hamcrest.CoreMatchers.*
 
 class AdditionalFreemarkerFeaturesSpec extends Specification {
 
@@ -73,6 +73,31 @@ class AdditionalFreemarkerFeaturesSpec extends Specification {
         then:
         parsedConfigAsString containsString('- type: http')
         parsedConfigAsString containsString('port: 8080')
+    }
+
+    def 'comments can be used'(){
+        given:
+        def config = '''
+                server:
+                  applicationConnectors:
+                    - type: http
+                      port: ${env.PORT!8080}
+                <#-- Un-comment to enable HTTPS
+                    - type: https
+                      port: ${env.SSL_PORT!8443}
+                      keyStorePath: ${env.SSL_KEYSTORE_PATH}
+                      keyStorePassword: ${env.SSL_KEYSTORE_PASS}
+                -->
+                '''
+
+        when:
+        def parsedConfig = templateConfigurationSourceProvider.open(config)
+        def parsedConfigAsString = IOUtils.toString(parsedConfig)
+
+        then:
+        parsedConfigAsString not(containsString('Un-comment to enable HTTPS'))
+        parsedConfigAsString not(containsString('- type: https'))
+        parsedConfigAsString not(containsString('keyStorePassword:'))
     }
 
     def 'simulating application profiles - production profile'() {
