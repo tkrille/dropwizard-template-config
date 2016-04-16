@@ -199,9 +199,24 @@ server:
 ```
 
 The previous example conditionally enables HTTPS if the environment variable
-`ENABLE_SSL` is `true`. Another advanced use case might be introducing
-configuration profiles that can be switched by using an environment variable
-like this:
+`ENABLE_SSL` is `true`. Comments are available too:
+
+```yaml
+server:
+  applicationConnectors:
+    - type: http
+      port: ${env.PORT!8080}
+<#-- Un-comment to enable HTTPS
+    - type: https
+      port: ${env.SSL_PORT!8443}
+      keyStorePath: ${env.SSL_KEYSTORE_PATH}
+      keyStorePassword: ${env.SSL_KEYSTORE_PASS}
+-->
+```
+
+Comments are writen between the `<#-- -->` Freemarker tags. They can span
+multiple lines. Another advanced use case might be introducing configuration
+profiles that can be switched by using an environment variable like this:
 
 ```yaml
 logging:
