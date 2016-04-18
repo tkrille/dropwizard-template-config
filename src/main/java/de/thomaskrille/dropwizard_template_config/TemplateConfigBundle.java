@@ -2,7 +2,6 @@ package de.thomaskrille.dropwizard_template_config;
 
 import com.google.common.base.Optional;
 import io.dropwizard.Bundle;
-import io.dropwizard.configuration.ConfigurationSourceProvider;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
 
@@ -19,6 +18,7 @@ public class TemplateConfigBundle implements Bundle {
 
     private final Charset charset;
     private final Optional<String> includePath;
+    private final Optional<String> outputPath;
 
     /**
      * Create a {@link TemplateConfigBundle} using the default configuration.
@@ -46,13 +46,14 @@ public class TemplateConfigBundle implements Bundle {
     public TemplateConfigBundle(final TemplateConfigBundleConfiguration configuration) {
         charset = configuration.charset();
         includePath = configuration.includePath();
+        outputPath = configuration.outputPath();
     }
 
     @Override
     public void initialize(final Bootstrap<?> bootstrap) {
         bootstrap.setConfigurationSourceProvider(new TemplateConfigurationSourceProvider(
                 bootstrap.getConfigurationSourceProvider(), new DefaultEnvironmentProvider(),
-                new DefaultSystemPropertiesProvider(), charset, includePath
+                new DefaultSystemPropertiesProvider(), charset, includePath, outputPath
         ));
     }
 

@@ -15,7 +15,7 @@ class AdvancedInterpolationSpec extends Specification {
             new TemplateConfigurationSourceProvider(new TestConfigSourceProvider(),
                     environmentProvider,
                     new DefaultSystemPropertiesProvider(),
-                    Charsets.UTF_8, Optional.absent())
+                    Charsets.UTF_8, Optional.absent(), Optional.absent())
 
     def 'replacing an environment variable inline works'() {
         given:

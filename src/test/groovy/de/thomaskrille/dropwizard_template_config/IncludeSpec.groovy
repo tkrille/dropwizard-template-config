@@ -12,7 +12,7 @@ class IncludeSpec extends Specification {
             new TemplateConfigurationSourceProvider(new TestConfigSourceProvider(),
                     environmentProvider,
                     new DefaultSystemPropertiesProvider(),
-                    Charsets.UTF_8, Optional.of("/config-snippets"))
+                    Charsets.UTF_8, Optional.of("/config-snippets"), Optional.absent())
 
     def 'config snippets can be included from the classpath'() {
         given:
@@ -85,7 +85,7 @@ class IncludeSpec extends Specification {
                 new TemplateConfigurationSourceProvider(new TestConfigSourceProvider(),
                         new DefaultEnvironmentProvider(),
                         new DefaultSystemPropertiesProvider(),
-                        Charsets.UTF_8, Optional.of(relativeIncludePath))
+                        Charsets.UTF_8, Optional.of(relativeIncludePath), Optional.absent())
         def config = '''
                 <#include "database.yaml">
                 '''.stripIndent()
