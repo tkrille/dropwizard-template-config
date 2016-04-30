@@ -12,6 +12,7 @@ public class TemplateConfigBundleConfiguration {
 
     private Charset charset = Charsets.UTF_8;
     private Optional<String> includePath = Optional.absent();
+    private Optional<String> outputPath = Optional.absent();
 
     /**
      * Get the configured charset (Default: UTF-8)
@@ -38,12 +39,29 @@ public class TemplateConfigBundleConfiguration {
     }
 
     /**
+     * Get the configured output path for the processed config (Default: None)
+     */
+    public Optional<String> outputPath() {
+        return outputPath;
+    }
+
+    /**
      * Set the path to include config snippets from
      *
-     * <p>Must be not {@code null}. By default there's no value set.
+     * <p>Must not be {@code null}. By default there's no value set.
      */
     public TemplateConfigBundleConfiguration includePath(String includePath) {
         this.includePath = Optional.of(includePath);
+        return this;
+    }
+
+    /**
+     * Set the path to output the filled-out config
+     *
+     * <p>Must not be {@code null}. By default there's no value set.
+     */
+    public TemplateConfigBundleConfiguration outputPath(String outputPath) {
+        this.outputPath = Optional.of(outputPath);
         return this;
     }
 }

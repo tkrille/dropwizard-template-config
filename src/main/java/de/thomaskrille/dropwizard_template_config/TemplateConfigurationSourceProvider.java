@@ -10,12 +10,14 @@ import com.google.common.base.Optional;
 import com.google.common.base.Throwables;
 
 import freemarker.template.*;
+import com.google.common.io.Files;
 import io.dropwizard.configuration.ConfigurationSourceProvider;
 
 public class TemplateConfigurationSourceProvider implements ConfigurationSourceProvider {
 
     private final Charset charset;
     private final Optional<String> includePath;
+    private final Optional<String> outputPath;
     private final SystemPropertiesProvider systemPropertiesProvider;
     private final ConfigurationSourceProvider parentProvider;
     private final EnvironmentProvider environmentProvider;
@@ -29,19 +31,23 @@ public class TemplateConfigurationSourceProvider implements ConfigurationSourceP
                                                final EnvironmentProvider environmentProvider,
                                                final SystemPropertiesProvider systemPropertiesProvider) {
 
-        this(parentProvider, environmentProvider, systemPropertiesProvider, Charsets.UTF_8, Optional.<String>absent());
+        this(parentProvider, environmentProvider, systemPropertiesProvider,
+                Charsets.UTF_8, Optional.<String>absent(), Optional.<String>absent());
     }
 
     TemplateConfigurationSourceProvider(final ConfigurationSourceProvider parentProvider,
                                         final EnvironmentProvider environmentProvider,
                                         final SystemPropertiesProvider systemPropertiesProvider,
-                                        final Charset charset, Optional<String> includePath) {
+                                        final Charset charset,
+                                        Optional<String> includePath,
+                                        Optional<String> outputPath) {
 
         this.parentProvider = parentProvider;
         this.environmentProvider = environmentProvider;
         this.systemPropertiesProvider = systemPropertiesProvider;
         this.charset = charset;
         this.includePath = includePath;
+        this.outputPath = outputPath;
     }
 
     @Override
@@ -69,8 +75,15 @@ public class TemplateConfigurationSourceProvider implements ConfigurationSourceP
 
             new Template("config", configTemplate, configuration)
                     .process(dataModel, new OutputStreamWriter(processedTemplateStream, charset));
+            byte[] processedTemplateBytes = processedTemplateStream.toByteArray();
 
-            return new ByteArrayInputStream(processedTemplateStream.toByteArray());
+            if (outputPath.isPresent()) {
+                File outputFile = new File(outputPath.get());
+                Files.createParentDirs(outputFile);
+                Files.write(processedTemplateBytes, outputFile);
+            }
+
+            return new ByteArrayInputStream(processedTemplateBytes);
         } catch (TemplateException e) {
             throw Throwables.propagate(e);
         }

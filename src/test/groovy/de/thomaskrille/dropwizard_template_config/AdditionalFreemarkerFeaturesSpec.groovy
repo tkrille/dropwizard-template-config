@@ -15,7 +15,7 @@ class AdditionalFreemarkerFeaturesSpec extends Specification {
             new TemplateConfigurationSourceProvider(new TestConfigSourceProvider(),
                     environmentProvider,
                     new DefaultSystemPropertiesProvider(),
-                    Charsets.UTF_8, Optional.absent())
+                    Charsets.UTF_8, Optional.absent(), Optional.absent())
 
     def 'conditionally enable https - on'() {
         given:

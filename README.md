@@ -309,6 +309,21 @@ Of course, you can also use any templating feature in the included file, like:
 - using conditionals
 - including additional files
 
+If you're not seeing the behavior you expect, it can be useful to inspect
+the rendered text of your template. Since 1.3.0, you can provide an
+`outputPath` to which the bundle will write the filled-out text of the config
+before passing it on to Dropwizard:
+```java
+@Override
+public void initialize(final Bootstrap<Configuration> bootstrap) {
+    ...
+    bootstrap.addBundle(new TemplateConfigBundle(
+            new TemplateConfigBundleConfiguration().outputPath("/tmp/config.yml")
+    ));
+    ...
+}
+```
+
 Be careful to not overuse all this stuff. In the end, a configuration file
 should stay as simple as possible and be easily readable. Extensively using
 advanced Freemarker features might get in the way of this principle.
