@@ -13,6 +13,8 @@ import freemarker.template.*;
 import com.google.common.io.Files;
 import io.dropwizard.configuration.ConfigurationSourceProvider;
 
+import java.util.Properties;
+
 public class TemplateConfigurationSourceProvider implements ConfigurationSourceProvider {
 
     private final Charset charset;
@@ -66,7 +68,17 @@ public class TemplateConfigurationSourceProvider implements ConfigurationSourceP
                 configuration.setClassForTemplateLoading(getClass(), includePath);
             }
 
-            Map<String, Object> dataModel = new HashMap<>(2);
+            Map<String, Object> dataModel = new HashMap<>();
+
+            // We populate the dataModel with lowest-priority items first, so that higher-priority
+            // items can overwrite existing entries.
+            // Lowest priority is a flat copy of Java system properties, then a flat copy of
+            // environment variables, and finally the "env" and "sys" namespaces.
+            Properties systemProperties = systemPropertiesProvider.getSystemProperties();
+            for (String propertyName : systemProperties.stringPropertyNames()) {
+                dataModel.put(propertyName, systemProperties.getProperty(propertyName));
+            }
+            dataModel.putAll(environmentProvider.getEnvironment());
             dataModel.put("env", environmentProvider.getEnvironment());
             dataModel.put("sys", systemPropertiesProvider.getSystemProperties());
 

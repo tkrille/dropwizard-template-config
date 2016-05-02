@@ -24,7 +24,7 @@ class EnvironmentVariablesSpec extends Specification {
                           type: simple
                           connector:
                             type: http
-                            port: ${env.PORT}'''
+                            port: ${PORT}'''
 
         environmentProvider.put('PORT', '8080')
 
@@ -44,7 +44,7 @@ class EnvironmentVariablesSpec extends Specification {
                           type: simple
                           connector:
                             type: http
-                            port: ${env.PORT!8080}'''
+                            port: ${PORT!8080}'''
 
         when:
         InputStream parsedConfig = templateConfigurationSourceProvider.open(config)
@@ -62,7 +62,7 @@ class EnvironmentVariablesSpec extends Specification {
                           type: simple
                           connector:
                             type: http
-                            port: ${env.PORT}'''
+                            port: ${PORT}'''
 
         when:
         templateConfigurationSourceProvider.open(config)
@@ -72,5 +72,26 @@ class EnvironmentVariablesSpec extends Specification {
         def exceptionsCause = exception.cause
         exceptionsCause isA(freemarker.core.InvalidReferenceException)
     }
+
+    def 'can use env prefix'() throws Exception {
+        given:
+        def config = '''server:
+                          type: simple
+                          connector:
+                            type: http
+                            port: ${env.PORT}'''
+
+        environmentProvider.put('PORT', '8080')
+
+        when:
+        def parsedConfig = templateConfigurationSourceProvider.open(config)
+        def parsedConfigAsString = IOUtils.toString(parsedConfig)
+
+        then:
+        parsedConfigAsString containsString('server:')
+        parsedConfigAsString containsString('type: http')
+        parsedConfigAsString containsString('port: 8080')
+    }
+
 
 }

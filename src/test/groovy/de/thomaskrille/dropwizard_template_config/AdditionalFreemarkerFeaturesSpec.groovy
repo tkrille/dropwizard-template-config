@@ -23,12 +23,12 @@ class AdditionalFreemarkerFeaturesSpec extends Specification {
                 server:
                   applicationConnectors:
                     - type: http
-                      port: ${env.PORT!8080}
-                <#if env.ENABLE_SSL == 'true'>
+                      port: ${PORT!8080}
+                <#if ENABLE_SSL == 'true'>
                     - type: https
-                      port: ${env.SSL_PORT!8443}
-                      keyStorePath: ${env.SSL_KEYSTORE_PATH}
-                      keyStorePassword: ${env.SSL_KEYSTORE_PASS}
+                      port: ${SSL_PORT!8443}
+                      keyStorePath: ${SSL_KEYSTORE_PATH}
+                      keyStorePassword: ${SSL_KEYSTORE_PASS}
                 </#if>
                 '''
 
@@ -55,12 +55,12 @@ class AdditionalFreemarkerFeaturesSpec extends Specification {
                 server:
                   applicationConnectors:
                     - type: http
-                      port: ${env.PORT!8080}
-                <#if env.ENABLE_SSL == 'true'>
+                      port: ${PORT!8080}
+                <#if ENABLE_SSL == 'true'>
                     - type: https
-                      port: ${env.SSL_PORT!8443}
-                      keyStorePath: ${env.SSL_KEYSTORE_PATH}
-                      keyStorePassword: ${env.SSL_KEYSTORE_PASS}
+                      port: ${SSL_PORT!8443}
+                      keyStorePath: ${SSL_KEYSTORE_PATH}
+                      keyStorePassword: ${SSL_KEYSTORE_PASS}
                 </#if>
                 '''
 
@@ -81,12 +81,12 @@ class AdditionalFreemarkerFeaturesSpec extends Specification {
                 server:
                   applicationConnectors:
                     - type: http
-                      port: ${env.PORT!8080}
+                      port: ${PORT!8080}
                 <#-- Un-comment to enable HTTPS
                     - type: https
-                      port: ${env.SSL_PORT!8443}
-                      keyStorePath: ${env.SSL_KEYSTORE_PATH}
-                      keyStorePassword: ${env.SSL_KEYSTORE_PASS}
+                      port: ${SSL_PORT!8443}
+                      keyStorePath: ${SSL_KEYSTORE_PATH}
+                      keyStorePassword: ${SSL_KEYSTORE_PASS}
                 -->
                 '''
 
@@ -104,7 +104,7 @@ class AdditionalFreemarkerFeaturesSpec extends Specification {
         given:
         def config = '''
                 logging:
-                <#if env.PROFILE == 'production'>
+                <#if PROFILE == 'production'>
                   level: WARN
                   loggers:
                     com.example.my_app: INFO
@@ -113,7 +113,7 @@ class AdditionalFreemarkerFeaturesSpec extends Specification {
                     - type: syslog
                       host: localhost
                       facility: local0
-                <#elseif env.PROFILE == 'development'>
+                <#elseif PROFILE == 'development'>
                   level: INFO
                   loggers:
                     com.example.my_app: DEBUG
@@ -142,7 +142,7 @@ class AdditionalFreemarkerFeaturesSpec extends Specification {
         given:
         def config = '''
                 logging:
-                <#if env.PROFILE == 'production'>
+                <#if PROFILE == 'production'>
                   level: WARN
                   loggers:
                     com.example.my_app: INFO
@@ -151,7 +151,7 @@ class AdditionalFreemarkerFeaturesSpec extends Specification {
                     - type: syslog
                       host: localhost
                       facility: local0
-                <#elseif env.PROFILE == 'development'>
+                <#elseif PROFILE == 'development'>
                   level: INFO
                   loggers:
                     com.example.my_app: DEBUG

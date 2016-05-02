@@ -24,7 +24,7 @@ class SystemPropertiesSpec extends Specification {
                           type: simple
                           connector:
                             type: http
-                            port: ${sys.http_port}'''
+                            port: ${http_port}'''
 
         systemPropertiesProvider.put('http_port', '8080')
 
@@ -44,7 +44,7 @@ class SystemPropertiesSpec extends Specification {
                           type: simple
                           connector:
                             type: http
-                            port: ${sys.http_port!8080}'''
+                            port: ${http_port!8080}'''
 
         when:
         def parsedConfig = templateConfigurationSourceProvider.open(config)
@@ -62,7 +62,7 @@ class SystemPropertiesSpec extends Specification {
                           type: simple
                           connector:
                             type: http
-                            port: ${sys.http_port}'''
+                            port: ${http_port}'''
 
         when:
         templateConfigurationSourceProvider.open(config)
@@ -71,6 +71,26 @@ class SystemPropertiesSpec extends Specification {
         def exception = thrown(RuntimeException)
         def exceptionsCause = exception.cause
         exceptionsCause isA(freemarker.core.InvalidReferenceException)
+    }
+
+    def 'can use sys prefix'() throws Exception {
+        given:
+        def config = '''server:
+                          type: simple
+                          connector:
+                            type: http
+                            port: ${sys.http_port}'''
+
+        systemPropertiesProvider.put('http_port', '8080')
+
+        when:
+        def parsedConfig = templateConfigurationSourceProvider.open(config)
+        def parsedConfigAsString = IOUtils.toString(parsedConfig)
+
+        then:
+        parsedConfigAsString containsString('server:')
+        parsedConfigAsString containsString('type: http')
+        parsedConfigAsString containsString('port: 8080')
     }
 
     def 'referencing a system property with a dot in its name must use bracket syntax'() throws Exception {
@@ -82,6 +102,26 @@ class SystemPropertiesSpec extends Specification {
                             port: ${sys['my_app.http.port']}'''
 
         systemPropertiesProvider.put('my_app.http.port', '8080')
+
+        when:
+        def parsedConfig = templateConfigurationSourceProvider.open(config)
+        def parsedConfigAsString = IOUtils.toString(parsedConfig)
+
+        then:
+        parsedConfigAsString containsString('server:')
+        parsedConfigAsString containsString('type: http')
+        parsedConfigAsString containsString('port: 8080')
+    }
+
+    def 'can use backslash for names with dash'() throws Exception {
+        given:
+        def config = '''server:
+                          type: simple
+                          connector:
+                            type: http
+                            port: ${http\\-port}'''
+
+        systemPropertiesProvider.put('http-port', '8080')
 
         when:
         def parsedConfig = templateConfigurationSourceProvider.open(config)
