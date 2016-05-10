@@ -26,7 +26,7 @@ class OutputPathSpec extends Specification {
                 server:
                   applicationConnectors:
                     - type: http
-                      port: ${env.PORT!8080}
+                      port: ${PORT!8080}
                 '''
 
         when:

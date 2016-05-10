@@ -61,13 +61,13 @@ server:
   connector:
     type: http
     # replacing environment variables
-    port: ${env.PORT}
+    port: ${PORT}
 logging:
   # with default values too
-  level: ${env.LOG_LEVEL!'WARN'}
+  level: ${LOG_LEVEL!'WARN'}
   appenders:
     # system properties also work
-    - type: ${sys.log_appender!'console'}
+    - type: ${log_appender!'console'}
 ```
 
 See [Freemarker's Template Author's Guide]
@@ -81,27 +81,24 @@ Using this bundle you can write your `config.yaml` as [Freemarker]
 environment variables. For all the Heroku users out there, we will try to use
 Heroku's environment variables for the examples.
 
-Environment variables can be accessed by using the `env` variable:
-
+Let's focus on a single piece of the configuration shown in the
+[Quickstart](#quickstart):
 ```yaml
 server:
   type: simple
   connector:
     type: http
-    port: ${env.PORT}
+    port: ${PORT}
 ```
 
-As you can see, to output the value of a variable you use `${variable}`. The
-`env` variable is set during startup and contains the application's environment
-as a `Map`. You can also specify a default value in case the environment
-variable is missing. This useful for local tests on your development machine:
-
+You can specify a default value in case the environment variable is missing.
+This is useful for local tests on your development machine:
 ```yaml
 server:
   type: simple
   connector:
     type: http
-    port: ${env.PORT!8080}
+    port: ${PORT!8080}
 ```
 
 Default values are separated from the variable name by a `!` and follow more or
@@ -109,39 +106,38 @@ less the well-known Java syntax for scalars. If there is no default value for
 a missing variable an exception will be thrown by Freemarker and wrapped in
 a `RuntimeException`.
 
-Not only environment variables, but system properties are available, too:
-
+Java system properties (the contents of `System.getProperties()`)
+are available, too:
 ```yaml
 server:
   type: simple
   connector:
     type: http
-    port: ${sys.http_port}
+    port: ${http_port}
 ```
 
-Here we are using the `sys` variable that's set on startup, too, and initialized
-to `System.getProperties()`. System properties also work with default values:
+There are some limitations to the variables and properties you can
+access through these top-level variables.
+For one, environment variables and system properties with the same name
+will collide (environment variables will mask system properties in this case).
+For another, names containing
+[characters such as `.` and `-` that have special meaning to Freemarker]
+(http://freemarker.org/docs/dgui_template_exp.html#dgui_template_exp_var_toplevel)
+won't be available.
 
+To alleviate these problems, this bundle also provides `Map`s for the
+environment (`env`) and system properties (`sys`) at the top level:
 ```yaml
-server:
-  type: simple
-  connector:
-    type: http
-    port: ${sys.http_port!8080}
+# Use `sys` to access a system property masked by an environment variable
+port: ${sys.http_port}
+
+# Use bracket notation to access a system property with a `.` in its name
+port: ${sys['my_app.http.port']}
+
+# Names with a dash (`-`) can be accessed via brackets or backslash
+port: ${sys['http-port']}
+port: ${http\-port}
 ```
-
-You can even use properties with a `.` in their name:
-
-```yaml
-server:
-  type: simple
-  connector:
-    type: http
-    port: ${sys['my_app.http.port']}
-```
-
-This approach works for other problematic characters too, such as `-`. And of
-course, it also works with environment variables.
 
 You can output variables inline in values. This is helpful to specify the
 database connection:
@@ -149,9 +145,9 @@ database connection:
 ```yaml
 database:
   driverClass: org.postgresql.Driver
-  user: ${env.DB_USER}
-  password: ${env.DB_PASSWORD}
-  url: jdbc:postgresql://${env.DB_HOST!'localhost'}:${env.DB_PORT}/my-app-db
+  user: ${DB_USER}
+  password: ${DB_PASSWORD}
+  url: jdbc:postgresql://${DB_HOST!'localhost'}:${DB_PORT}/my-app-db
 ```
 
 In fact, you can output anything anywhere, because Freemarker doesn't know
@@ -165,9 +161,9 @@ anything about YAML:
 # SERVER_CONNECTOR_TYPE_LINE='type: http'
 #
 server:
-  ${env.SERVER_TYPE_LINE}
+  ${SERVER_TYPE_LINE}
   connector:
-    ${env.SERVER_CONNECTOR_TYPE_LINE}
+    ${SERVER_CONNECTOR_TYPE_LINE}
     port: 8080
 ```
 
@@ -189,12 +185,12 @@ any other Freemarker features beyond simple variable interpolation:
 server:
   applicationConnectors:
     - type: http
-      port: ${env.PORT!8080}
-<#if env.ENABLE_SSL == 'true'>
+      port: ${PORT!8080}
+<#if ENABLE_SSL == 'true'>
     - type: https
-      port: ${env.SSL_PORT!8443}
-      keyStorePath: ${env.SSL_KEYSTORE_PATH}
-      keyStorePassword: ${env.SSL_KEYSTORE_PASS}
+      port: ${SSL_PORT!8443}
+      keyStorePath: ${SSL_KEYSTORE_PATH}
+      keyStorePassword: ${SSL_KEYSTORE_PASS}
 </#if>
 ```
 
@@ -205,12 +201,12 @@ The previous example conditionally enables HTTPS if the environment variable
 server:
   applicationConnectors:
     - type: http
-      port: ${env.PORT!8080}
+      port: ${PORT!8080}
 <#-- Un-comment to enable HTTPS
     - type: https
-      port: ${env.SSL_PORT!8443}
-      keyStorePath: ${env.SSL_KEYSTORE_PATH}
-      keyStorePassword: ${env.SSL_KEYSTORE_PASS}
+      port: ${SSL_PORT!8443}
+      keyStorePath: ${SSL_KEYSTORE_PATH}
+      keyStorePassword: ${SSL_KEYSTORE_PASS}
 -->
 ```
 
@@ -220,7 +216,7 @@ profiles that can be switched by using an environment variable like this:
 
 ```yaml
 logging:
-<#if env.PROFILE == 'production'>
+<#if PROFILE == 'production'>
   level: WARN
   loggers:
     com.example.my_app: INFO
@@ -229,7 +225,7 @@ logging:
     - type: syslog
       host: localhost
       facility: local0
-<#elseif env.PROFILE == 'development'>
+<#elseif PROFILE == 'development'>
   level: INFO
   loggers:
     com.example.my_app: DEBUG
