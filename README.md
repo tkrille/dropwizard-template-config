@@ -320,10 +320,6 @@ on how to write templates.
 
 TODO: write me!
 
-## Under the Hood
-
-TODO: write me!
-
 ## Copyright Notice
 
 This project is licensed under the Apache License, Version 2.0, January 2004, and uses the following
