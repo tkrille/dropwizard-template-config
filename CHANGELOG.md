@@ -1,5 +1,19 @@
 # Changelog
 
+## 1.3.0 (2016-05-21)
+
+### Features
+
+- Environment variables and system properties are now accessible without the `env.` or `sys.` prefixes.
+  So instead of writing `${env.PORT}` you can now just write `${PORT}`.
+  Environment variables overwrite system properties, if they have the same name.
+  `env.` and `sys.` are still supported for backwards compatibility and to access system properties
+  with special characters in their name.
+
+- Write the rendered `config.yaml` to a file for debugging and testing.
+  Use `TemplateConfigBundleConfiguration.outputPath` to set the path to the file.
+  It is not recommended to use this in production, as it could leak sensitive information.
+
 ## 1.2.0 (2016-03-03)
 
 ### Features
