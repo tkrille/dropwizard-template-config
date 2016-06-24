@@ -17,7 +17,8 @@ import java.nio.charset.Charset;
 public class TemplateConfigBundle implements Bundle {
 
     private final Charset charset;
-    private final Optional<String> includePath;
+    private final Optional<String> resourceIncludePath;
+    private final Optional<String> fileIncludePath;
     private final Optional<String> outputPath;
 
     /**
@@ -45,7 +46,8 @@ public class TemplateConfigBundle implements Bundle {
      */
     public TemplateConfigBundle(final TemplateConfigBundleConfiguration configuration) {
         charset = configuration.charset();
-        includePath = configuration.includePath();
+        resourceIncludePath = configuration.resourceIncludePath();
+        fileIncludePath = configuration.fileIncludePath();
         outputPath = configuration.outputPath();
     }
 
@@ -53,7 +55,8 @@ public class TemplateConfigBundle implements Bundle {
     public void initialize(final Bootstrap<?> bootstrap) {
         bootstrap.setConfigurationSourceProvider(new TemplateConfigurationSourceProvider(
                 bootstrap.getConfigurationSourceProvider(), new DefaultEnvironmentProvider(),
-                new DefaultSystemPropertiesProvider(), charset, includePath, outputPath
+                new DefaultSystemPropertiesProvider(), charset,
+                resourceIncludePath, fileIncludePath, outputPath
         ));
     }
 

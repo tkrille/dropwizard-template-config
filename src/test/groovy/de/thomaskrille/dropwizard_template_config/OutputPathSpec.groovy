@@ -18,7 +18,7 @@ class OutputPathSpec extends Specification {
             new TemplateConfigurationSourceProvider(new TestConfigSourceProvider(),
                     environmentProvider,
                     new DefaultSystemPropertiesProvider(),
-                    Charsets.UTF_8, Optional.absent(), Optional.of(outputPath))
+                    Charsets.UTF_8, Optional.absent(), Optional.absent(), Optional.of(outputPath))
 
     def 'rendered output is written to configured outputPath'() {
         given:

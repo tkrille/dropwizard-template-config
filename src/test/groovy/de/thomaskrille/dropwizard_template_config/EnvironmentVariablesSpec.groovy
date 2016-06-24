@@ -16,7 +16,7 @@ class EnvironmentVariablesSpec extends Specification {
             new TemplateConfigurationSourceProvider(new TestConfigSourceProvider(),
                     environmentProvider,
                     new DefaultSystemPropertiesProvider(),
-                    Charsets.UTF_8, Optional.absent(), Optional.absent())
+                    Charsets.UTF_8, Optional.absent(), Optional.absent(), Optional.absent())
 
     def 'replacing an environment variable works'() throws Exception {
         given:
