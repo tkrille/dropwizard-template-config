@@ -11,7 +11,8 @@ import java.nio.charset.Charset;
 public class TemplateConfigBundleConfiguration {
 
     private Charset charset = Charsets.UTF_8;
-    private Optional<String> includePath = Optional.absent();
+    private Optional<String> resourceIncludePath = Optional.absent();
+    private Optional<String> fileIncludePath = Optional.absent();
     private Optional<String> outputPath = Optional.absent();
 
     /**
@@ -32,10 +33,27 @@ public class TemplateConfigBundleConfiguration {
     }
 
     /**
-     * Get the configured include path (Default: None)
+     * Get the configured resource include path (Default: None)
+     *
+     * @deprecated Replaced by {@link #resourceIncludePath}.
      */
+    @Deprecated
     public Optional<String> includePath() {
-        return includePath;
+        return resourceIncludePath;
+    }
+
+    /**
+     * Get the configured resource include path (Default: None)
+     */
+    public Optional<String> resourceIncludePath() {
+        return resourceIncludePath;
+    }
+
+    /**
+     * Get the configured file include path (Default: None)
+     */
+    public Optional<String> fileIncludePath() {
+        return fileIncludePath;
     }
 
     /**
@@ -49,9 +67,52 @@ public class TemplateConfigBundleConfiguration {
      * Set the path to include config snippets from
      *
      * <p>Must not be {@code null}. By default there's no value set.
+     *
+     * @deprecated Replaced by {@link #resourceIncludePath(String)}.
      */
+    @Deprecated
     public TemplateConfigBundleConfiguration includePath(String includePath) {
-        this.includePath = Optional.of(includePath);
+        this.resourceIncludePath = Optional.of(includePath);
+        return this;
+    }
+
+    /**
+     * Set the resource path to include config snippets from
+     *
+     * <p>Must not be {@code null}. By default there's no value set.
+     * Only one of {@code resourceIncludePath} or {@code fileIncludePath}
+     * may be specified.
+     *
+     * @throws IllegalStateException if fileIncludePath is set
+     */
+    public TemplateConfigBundleConfiguration resourceIncludePath(String path) {
+        if (this.fileIncludePath.isPresent()) {
+            throw new IllegalStateException(
+                "A value for fileIncludePath is already present; " +
+                "only one of resourceIncludePath or fileIncludePath may be specified."
+            );
+        }
+        this.resourceIncludePath = Optional.of(path);
+        return this;
+    }
+
+    /**
+     * Set the file path to include config snippets from
+     *
+     * <p>Must not be {@code null}. By default there's no value set.
+     * Only one of {@code resourceIncludePath} or {@code fileIncludePath}
+     * may be specified.
+     *
+     * @throws IllegalStateException if resourceIncludePath is already set
+     */
+    public TemplateConfigBundleConfiguration fileIncludePath(String path) {
+        if (this.resourceIncludePath.isPresent()) {
+            throw new IllegalStateException(
+                "A value for resourceIncludePath is already present; " +
+                "only one of resourceIncludePath or fileIncludePath may be specified."
+            );
+        }
+        this.fileIncludePath = Optional.of(path);
         return this;
     }
 

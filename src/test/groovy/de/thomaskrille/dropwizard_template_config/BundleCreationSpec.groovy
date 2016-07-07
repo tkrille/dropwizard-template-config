@@ -11,7 +11,8 @@ class BundleCreationSpec extends Specification {
 
         then:
         bundle.charset == Charsets.UTF_8
-        bundle.includePath == Optional.absent()
+        bundle.resourceIncludePath == Optional.absent()
+        bundle.fileIncludePath == Optional.absent()
     }
 
     def 'a specific configuration can be applied'() {
@@ -19,11 +20,11 @@ class BundleCreationSpec extends Specification {
         def bundle = new TemplateConfigBundle(
                 new TemplateConfigBundleConfiguration()
                         .charset(Charsets.US_ASCII)
-                        .includePath('includePath')
+                        .resourceIncludePath('includePath')
         )
 
         then:
         bundle.charset == Charsets.US_ASCII
-        bundle.includePath.get() == 'includePath'
+        bundle.resourceIncludePath.get() == 'includePath'
     }
 }

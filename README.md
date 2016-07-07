@@ -225,24 +225,39 @@ logging:
 </#if>
 ```
 
-Since 1.2.0, you can include config file snippets from the classpath.
-For this to work you have to set a path under the classpath as the include directory:
+
+You can include snippets from external config files via the `<#include>` tag.
+For this to work, you have to set an include directory
+based either on a resource in the classpath:
 
 ```java
 @Override
 public void initialize(final Bootstrap<Configuration> bootstrap) {
     ...
     bootstrap.addBundle(new TemplateConfigBundle(
-            new TemplateConfigBundleConfiguration().includePath("/config")
+            new TemplateConfigBundleConfiguration().resourceIncludePath("/config")
     ));
     ...
 }
 ```
 
-Config file snippets will be read from this directory.
-You can also use sub-folders to organize your configurations.
-The include path is absolute.
-Relative paths will be made absolute by prepending a slash (`/`).
+or on the local filesystem:
+
+```java
+@Override
+public void initialize(final Bootstrap<Configuration> bootstrap) {
+    ...
+    bootstrap.addBundle(new TemplateConfigBundle(
+            new TemplateConfigBundleConfiguration().fileIncludePath("./config")
+    ));
+    ...
+}
+```
+
+Feel free to use sub-folders to organize your configurations.
+While the argument to `fileIncludePath` may be relative to the current working
+directory or absolute, the argument to `resourceIncludePath` will always
+be made absolute by prepending a slash (`/`) if not present.
 You can then include configuration templates from other files.
 To extract the database config, for example, create a config like this:
 

@@ -4,6 +4,7 @@ import java.io.*;
 import java.nio.charset.Charset;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Properties;
 
 import com.google.common.base.Charsets;
 import com.google.common.base.Optional;
@@ -13,12 +14,11 @@ import freemarker.template.*;
 import com.google.common.io.Files;
 import io.dropwizard.configuration.ConfigurationSourceProvider;
 
-import java.util.Properties;
-
 public class TemplateConfigurationSourceProvider implements ConfigurationSourceProvider {
 
     private final Charset charset;
-    private final Optional<String> includePath;
+    private final Optional<String> resourceIncludePath;
+    private final Optional<String> fileIncludePath;
     private final Optional<String> outputPath;
     private final SystemPropertiesProvider systemPropertiesProvider;
     private final ConfigurationSourceProvider parentProvider;
@@ -33,22 +33,24 @@ public class TemplateConfigurationSourceProvider implements ConfigurationSourceP
                                                final EnvironmentProvider environmentProvider,
                                                final SystemPropertiesProvider systemPropertiesProvider) {
 
-        this(parentProvider, environmentProvider, systemPropertiesProvider,
-                Charsets.UTF_8, Optional.<String>absent(), Optional.<String>absent());
+        this(parentProvider, environmentProvider, systemPropertiesProvider, Charsets.UTF_8,
+             Optional.<String>absent(), Optional.<String>absent(), Optional.<String>absent());
     }
 
     TemplateConfigurationSourceProvider(final ConfigurationSourceProvider parentProvider,
                                         final EnvironmentProvider environmentProvider,
                                         final SystemPropertiesProvider systemPropertiesProvider,
                                         final Charset charset,
-                                        Optional<String> includePath,
+                                        Optional<String> resourceIncludePath,
+                                        Optional<String> fileIncludePath,
                                         Optional<String> outputPath) {
 
         this.parentProvider = parentProvider;
         this.environmentProvider = environmentProvider;
         this.systemPropertiesProvider = systemPropertiesProvider;
         this.charset = charset;
-        this.includePath = includePath;
+        this.resourceIncludePath = resourceIncludePath;
+        this.fileIncludePath = fileIncludePath;
         this.outputPath = outputPath;
     }
 
@@ -60,12 +62,16 @@ public class TemplateConfigurationSourceProvider implements ConfigurationSourceP
             configuration.setNumberFormat("computer");
             configuration.setDefaultEncoding(charset.name());
 
-            if(includePath.isPresent()) {
-                String includePath = this.includePath.get();
-                if(!includePath.startsWith("/")) {
+            if (resourceIncludePath.isPresent()) {
+                String includePath = this.resourceIncludePath.get();
+                if (!includePath.startsWith("/")) {
                     includePath = "/" + includePath;
                 }
                 configuration.setClassForTemplateLoading(getClass(), includePath);
+            }
+            else if (fileIncludePath.isPresent()) {
+                File includeDir = new File(this.fileIncludePath.get());
+                configuration.setDirectoryForTemplateLoading(includeDir);
             }
 
             Map<String, Object> dataModel = new HashMap<>();
