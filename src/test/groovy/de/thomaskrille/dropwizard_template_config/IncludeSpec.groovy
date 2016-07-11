@@ -115,7 +115,19 @@ class IncludeSpec extends Specification {
                 '''.stripIndent()
     }
 
-    def 'specifying both resource and file include paths fails'(){
+    def 'specifying file and then resource include paths fails'(){
+        given:
+        def TemplateConfigBundleConfiguration config =
+                new TemplateConfigBundleConfiguration()
+                        .fileIncludePath("src/test/resources/config-snippets/")
+        when:
+        config.resourceIncludePath("/config-snippets")
+
+        then:
+        thrown(IllegalStateException)
+    }
+
+    def 'specifying resource and then file include paths fails'(){
         given:
         def TemplateConfigBundleConfiguration config =
                 new TemplateConfigBundleConfiguration()
@@ -125,8 +137,6 @@ class IncludeSpec extends Specification {
         config.fileIncludePath("src/test/resources/config-snippets/")
 
         then:
-        def exception = thrown(RuntimeException)
-        exception isA(IllegalStateException)
+        thrown(IllegalStateException)
     }
-
 }
