@@ -1,5 +1,23 @@
 # Changelog
 
+## 1.4.0 (2016-05-21)
+
+### Features
+
+- Allow inclusion of config snippets from the file system. Use
+  `TemplateConfigBundleConfiguration.fileIncludePath(java.lang.String)` to set the base include
+  directory. See the [tutorial](README.md#tutorial) for details.
+
+### Changes
+
+- Remove deprecated constructor `TemplateConfigurationSourceProvider.TemplateConfigurationSourceProvider`.
+
+### Deprecations
+
+- Method `TemplateConfigBundleConfiguration.includePath` has been replaced with
+  `TemplateConfigBundleConfiguration.resourceIncludePath`. It will be removed
+  in 1.7.0 or 2.0.0.
+
 ## 1.3.0 (2016-05-21)
 
 ### Features
