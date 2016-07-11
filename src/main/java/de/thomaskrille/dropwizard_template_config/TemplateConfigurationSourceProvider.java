@@ -1,18 +1,26 @@
 package de.thomaskrille.dropwizard_template_config;
 
-import java.io.*;
+import com.google.common.base.Optional;
+import com.google.common.base.Throwables;
+import com.google.common.io.Files;
+import freemarker.template.Configuration;
+import freemarker.template.Template;
+import freemarker.template.TemplateException;
+import freemarker.template.TemplateExceptionHandler;
+import io.dropwizard.configuration.ConfigurationSourceProvider;
+
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.io.Reader;
 import java.nio.charset.Charset;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
-
-import com.google.common.base.Charsets;
-import com.google.common.base.Optional;
-import com.google.common.base.Throwables;
-
-import freemarker.template.*;
-import com.google.common.io.Files;
-import io.dropwizard.configuration.ConfigurationSourceProvider;
 
 public class TemplateConfigurationSourceProvider implements ConfigurationSourceProvider {
 
@@ -23,19 +31,6 @@ public class TemplateConfigurationSourceProvider implements ConfigurationSourceP
     private final SystemPropertiesProvider systemPropertiesProvider;
     private final ConfigurationSourceProvider parentProvider;
     private final EnvironmentProvider environmentProvider;
-
-    /**
-     * @deprecated Don't use this class directly, use the
-     * {@link de.thomaskrille.dropwizard_template_config.TemplateConfigBundle}.
-     */
-    @Deprecated
-    public TemplateConfigurationSourceProvider(final ConfigurationSourceProvider parentProvider,
-                                               final EnvironmentProvider environmentProvider,
-                                               final SystemPropertiesProvider systemPropertiesProvider) {
-
-        this(parentProvider, environmentProvider, systemPropertiesProvider, Charsets.UTF_8,
-             Optional.<String>absent(), Optional.<String>absent(), Optional.<String>absent());
-    }
 
     TemplateConfigurationSourceProvider(final ConfigurationSourceProvider parentProvider,
                                         final EnvironmentProvider environmentProvider,
