@@ -58,14 +58,14 @@ public class TemplateConfigurationSourceProvider implements ConfigurationSourceP
             configuration.setDefaultEncoding(charset.name());
 
             if (resourceIncludePath.isPresent()) {
-                String includePath = this.resourceIncludePath.get();
+                String includePath = resourceIncludePath.get();
                 if (!includePath.startsWith("/")) {
                     includePath = "/" + includePath;
                 }
                 configuration.setClassForTemplateLoading(getClass(), includePath);
             }
             else if (fileIncludePath.isPresent()) {
-                File includeDir = new File(this.fileIncludePath.get());
+                File includeDir = new File(fileIncludePath.get());
                 configuration.setDirectoryForTemplateLoading(includeDir);
             }
 
