@@ -15,14 +15,15 @@ class IncludeSpec extends Specification {
                     environmentProvider,
                     new DefaultSystemPropertiesProvider(),
                     Charsets.UTF_8,
-                    Optional.of("/config-snippets"), Optional.absent(), Optional.absent())
+                    Optional.of("/config-snippets"), Optional.absent(), Optional.absent(), Optional.absent())
 
     def static TemplateConfigurationSourceProvider providerWithFileIncludePath =
             new TemplateConfigurationSourceProvider(new TestConfigSourceProvider(),
                     environmentProvider,
                     new DefaultSystemPropertiesProvider(),
                     Charsets.UTF_8,
-                    Optional.absent(), Optional.of("src/test/resources/config-snippets/"), Optional.absent())
+                    Optional.absent(), Optional.of("src/test/resources/config-snippets/"), Optional.absent(),
+                    Optional.absent())
 
     def 'config snippets can be included from the classpath and filesystem'() {
         given:
@@ -96,7 +97,8 @@ class IncludeSpec extends Specification {
                 new TemplateConfigurationSourceProvider(new TestConfigSourceProvider(),
                         new DefaultEnvironmentProvider(),
                         new DefaultSystemPropertiesProvider(),
-                        Charsets.UTF_8, Optional.of(relativeIncludePath), Optional.absent(), Optional.absent())
+                        Charsets.UTF_8, Optional.of(relativeIncludePath), Optional.absent(), Optional.absent(),
+                        Optional.absent())
         def config = '''
                 <#include "database.yaml">
                 '''.stripIndent()

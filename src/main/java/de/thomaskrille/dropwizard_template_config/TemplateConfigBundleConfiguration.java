@@ -4,6 +4,8 @@ import com.google.common.base.Charsets;
 import com.google.common.base.Optional;
 
 import java.nio.charset.Charset;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 /**
  * The configuration for a {@link TemplateConfigBundle}
@@ -14,6 +16,7 @@ public class TemplateConfigBundleConfiguration {
     private Optional<String> resourceIncludePath = Optional.absent();
     private Optional<String> fileIncludePath = Optional.absent();
     private Optional<String> outputPath = Optional.absent();
+    private Optional<Set<TemplateConfigProvider>> customProviders = Optional.absent();
 
     /**
      * Get the configured charset (Default: UTF-8)
@@ -62,6 +65,11 @@ public class TemplateConfigBundleConfiguration {
     public Optional<String> outputPath() {
         return outputPath;
     }
+
+    /**
+     * Get the set of custom providers used to add variables to the configuration template (Default: None)
+     */
+    public Optional<Set<TemplateConfigProvider>> customProviders() { return customProviders; }
 
     /**
      * Set the path to include config snippets from
@@ -123,6 +131,20 @@ public class TemplateConfigBundleConfiguration {
      */
     public TemplateConfigBundleConfiguration outputPath(String outputPath) {
         this.outputPath = Optional.of(outputPath);
+        return this;
+    }
+
+    /**
+     * Add a custom provider used to add your own variables to the configuration template.
+     */
+    public TemplateConfigBundleConfiguration withCustomProvider(TemplateConfigProvider customProvider) {
+        if (!this.customProviders.isPresent()) {
+            // Want the set to preserve the order things are inserted into it so we have predictable behavior when keys
+            // have the same names in the template.
+            Set<TemplateConfigProvider> customProviderSet = new LinkedHashSet<>();
+            this.customProviders = Optional.of(customProviderSet);
+        }
+        this.customProviders.get().add(customProvider);
         return this;
     }
 }

@@ -19,6 +19,7 @@ import java.io.OutputStreamWriter;
 import java.io.Reader;
 import java.nio.charset.Charset;
 import java.util.HashMap;
+import java.util.Set;
 import java.util.Map;
 import java.util.Properties;
 
@@ -31,6 +32,7 @@ public class TemplateConfigurationSourceProvider implements ConfigurationSourceP
     private final SystemPropertiesProvider systemPropertiesProvider;
     private final ConfigurationSourceProvider parentProvider;
     private final EnvironmentProvider environmentProvider;
+    private final Optional<Set<TemplateConfigProvider>> customProviders;
 
     TemplateConfigurationSourceProvider(final ConfigurationSourceProvider parentProvider,
                                         final EnvironmentProvider environmentProvider,
@@ -38,7 +40,8 @@ public class TemplateConfigurationSourceProvider implements ConfigurationSourceP
                                         final Charset charset,
                                         Optional<String> resourceIncludePath,
                                         Optional<String> fileIncludePath,
-                                        Optional<String> outputPath) {
+                                        Optional<String> outputPath,
+                                        Optional<Set<TemplateConfigProvider>> customProviders) {
 
         this.parentProvider = parentProvider;
         this.environmentProvider = environmentProvider;
@@ -47,6 +50,7 @@ public class TemplateConfigurationSourceProvider implements ConfigurationSourceP
         this.resourceIncludePath = resourceIncludePath;
         this.fileIncludePath = fileIncludePath;
         this.outputPath = outputPath;
+        this.customProviders = customProviders;
     }
 
     @Override
@@ -74,14 +78,25 @@ public class TemplateConfigurationSourceProvider implements ConfigurationSourceP
             // We populate the dataModel with lowest-priority items first, so that higher-priority
             // items can overwrite existing entries.
             // Lowest priority is a flat copy of Java system properties, then a flat copy of
-            // environment variables, and finally the "env" and "sys" namespaces.
+            // environment variables, then a flat copy of custom variables, and finally the "env", "sys",
+            // and custom namespaces.
             Properties systemProperties = systemPropertiesProvider.getSystemProperties();
             for (String propertyName : systemProperties.stringPropertyNames()) {
                 dataModel.put(propertyName, systemProperties.getProperty(propertyName));
             }
             dataModel.putAll(environmentProvider.getEnvironment());
+            if (customProviders.isPresent()) {
+                for (TemplateConfigProvider customProvider : customProviders.get()) {
+                    dataModel.putAll(customProvider.getDataModel());
+                }
+            }
             dataModel.put("env", environmentProvider.getEnvironment());
             dataModel.put("sys", systemPropertiesProvider.getSystemProperties());
+            if (customProviders.isPresent()) {
+                for (TemplateConfigProvider customProvider : customProviders.get()) {
+                    dataModel.put(customProvider.getNamespace(), customProvider.getDataModel());
+                }
+            }
 
             ByteArrayOutputStream processedTemplateStream = new ByteArrayOutputStream();
             Reader configTemplate = new InputStreamReader(parentProvider.open(path), charset);

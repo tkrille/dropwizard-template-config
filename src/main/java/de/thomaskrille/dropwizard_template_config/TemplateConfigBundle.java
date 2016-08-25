@@ -6,6 +6,7 @@ import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
 
 import java.nio.charset.Charset;
+import java.util.Set;
 
 /**
  * Dropwizard {@link io.dropwizard.Bundle} that wraps the currently configured
@@ -20,6 +21,7 @@ public class TemplateConfigBundle implements Bundle {
     private final Optional<String> resourceIncludePath;
     private final Optional<String> fileIncludePath;
     private final Optional<String> outputPath;
+    private final Optional<Set<TemplateConfigProvider>> customProviders;
 
     /**
      * Create a {@link TemplateConfigBundle} using the default configuration.
@@ -49,6 +51,7 @@ public class TemplateConfigBundle implements Bundle {
         resourceIncludePath = configuration.resourceIncludePath();
         fileIncludePath = configuration.fileIncludePath();
         outputPath = configuration.outputPath();
+        customProviders = configuration.customProviders();
     }
 
     @Override
@@ -56,7 +59,7 @@ public class TemplateConfigBundle implements Bundle {
         bootstrap.setConfigurationSourceProvider(new TemplateConfigurationSourceProvider(
                 bootstrap.getConfigurationSourceProvider(), new DefaultEnvironmentProvider(),
                 new DefaultSystemPropertiesProvider(), charset,
-                resourceIncludePath, fileIncludePath, outputPath
+                resourceIncludePath, fileIncludePath, outputPath, customProviders
         ));
     }
 
