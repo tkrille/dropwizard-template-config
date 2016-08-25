@@ -32,7 +32,7 @@ public class TemplateConfigurationSourceProvider implements ConfigurationSourceP
     private final SystemPropertiesProvider systemPropertiesProvider;
     private final ConfigurationSourceProvider parentProvider;
     private final EnvironmentProvider environmentProvider;
-    private final Optional<Set<TemplateConfigProvider>> customProviders;
+    private final Set<TemplateConfigProvider> customProviders;
 
     TemplateConfigurationSourceProvider(final ConfigurationSourceProvider parentProvider,
                                         final EnvironmentProvider environmentProvider,
@@ -41,7 +41,7 @@ public class TemplateConfigurationSourceProvider implements ConfigurationSourceP
                                         Optional<String> resourceIncludePath,
                                         Optional<String> fileIncludePath,
                                         Optional<String> outputPath,
-                                        Optional<Set<TemplateConfigProvider>> customProviders) {
+                                        final Set<TemplateConfigProvider> customProviders) {
 
         this.parentProvider = parentProvider;
         this.environmentProvider = environmentProvider;
@@ -85,17 +85,13 @@ public class TemplateConfigurationSourceProvider implements ConfigurationSourceP
                 dataModel.put(propertyName, systemProperties.getProperty(propertyName));
             }
             dataModel.putAll(environmentProvider.getEnvironment());
-            if (customProviders.isPresent()) {
-                for (TemplateConfigProvider customProvider : customProviders.get()) {
-                    dataModel.putAll(customProvider.getDataModel());
-                }
+            for (TemplateConfigProvider customProvider : customProviders) {
+                dataModel.putAll(customProvider.getDataModel());
             }
             dataModel.put("env", environmentProvider.getEnvironment());
             dataModel.put("sys", systemPropertiesProvider.getSystemProperties());
-            if (customProviders.isPresent()) {
-                for (TemplateConfigProvider customProvider : customProviders.get()) {
-                    dataModel.put(customProvider.getNamespace(), customProvider.getDataModel());
-                }
+            for (TemplateConfigProvider customProvider : customProviders) {
+                dataModel.put(customProvider.getNamespace(), customProvider.getDataModel());
             }
 
             ByteArrayOutputStream processedTemplateStream = new ByteArrayOutputStream();

@@ -16,7 +16,7 @@ class SystemPropertiesSpec extends Specification {
             new TemplateConfigurationSourceProvider(new TestConfigSourceProvider(),
                     new DefaultEnvironmentProvider(),
                     systemPropertiesProvider,
-                    Charsets.UTF_8, Optional.absent(), Optional.absent(), Optional.absent(), Optional.absent())
+                    Charsets.UTF_8, Optional.absent(), Optional.absent(), Optional.absent(), new LinkedHashSet<>())
 
     def 'replacing a system property works'() throws Exception {
         given:

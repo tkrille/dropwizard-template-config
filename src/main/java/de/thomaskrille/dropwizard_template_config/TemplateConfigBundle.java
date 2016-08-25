@@ -21,7 +21,7 @@ public class TemplateConfigBundle implements Bundle {
     private final Optional<String> resourceIncludePath;
     private final Optional<String> fileIncludePath;
     private final Optional<String> outputPath;
-    private final Optional<Set<TemplateConfigProvider>> customProviders;
+    private final Set<TemplateConfigProvider> customProviders;
 
     /**
      * Create a {@link TemplateConfigBundle} using the default configuration.

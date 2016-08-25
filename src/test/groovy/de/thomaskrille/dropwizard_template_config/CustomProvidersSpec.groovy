@@ -20,7 +20,7 @@ class CustomProvidersSpec extends Specification {
                     environmentProvider,
                     systemPropertiesProvider,
                     Charsets.UTF_8, Optional.absent(), Optional.absent(), Optional.absent(),
-                    Optional.of(customProviders))
+                    customProviders)
 
     def 'replacing custom variables inline works'() {
         given:

@@ -4,8 +4,6 @@ import com.google.common.base.*
 import org.apache.commons.io.IOUtils
 import spock.lang.Specification
 
-import static org.hamcrest.CoreMatchers.isA
-
 class IncludeSpec extends Specification {
 
     def static TestEnvironmentProvider environmentProvider = new TestEnvironmentProvider()
@@ -15,7 +13,7 @@ class IncludeSpec extends Specification {
                     environmentProvider,
                     new DefaultSystemPropertiesProvider(),
                     Charsets.UTF_8,
-                    Optional.of("/config-snippets"), Optional.absent(), Optional.absent(), Optional.absent())
+                    Optional.of("/config-snippets"), Optional.absent(), Optional.absent(), new LinkedHashSet<>())
 
     def static TemplateConfigurationSourceProvider providerWithFileIncludePath =
             new TemplateConfigurationSourceProvider(new TestConfigSourceProvider(),
@@ -23,7 +21,7 @@ class IncludeSpec extends Specification {
                     new DefaultSystemPropertiesProvider(),
                     Charsets.UTF_8,
                     Optional.absent(), Optional.of("src/test/resources/config-snippets/"), Optional.absent(),
-                    Optional.absent())
+                    new LinkedHashSet<>())
 
     def 'config snippets can be included from the classpath and filesystem'() {
         given:
@@ -98,7 +96,7 @@ class IncludeSpec extends Specification {
                         new DefaultEnvironmentProvider(),
                         new DefaultSystemPropertiesProvider(),
                         Charsets.UTF_8, Optional.of(relativeIncludePath), Optional.absent(), Optional.absent(),
-                        Optional.absent())
+                        new LinkedHashSet<>())
         def config = '''
                 <#include "database.yaml">
                 '''.stripIndent()

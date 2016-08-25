@@ -16,7 +16,7 @@ public class TemplateConfigBundleConfiguration {
     private Optional<String> resourceIncludePath = Optional.absent();
     private Optional<String> fileIncludePath = Optional.absent();
     private Optional<String> outputPath = Optional.absent();
-    private Optional<Set<TemplateConfigProvider>> customProviders = Optional.absent();
+    private Set<TemplateConfigProvider> customProviders = new LinkedHashSet<>();
 
     /**
      * Get the configured charset (Default: UTF-8)
@@ -67,9 +67,9 @@ public class TemplateConfigBundleConfiguration {
     }
 
     /**
-     * Get the set of custom providers used to add variables to the configuration template (Default: None)
+     * Get the set of custom providers used to add variables to the configuration template (Default: Empty Set)
      */
-    public Optional<Set<TemplateConfigProvider>> customProviders() { return customProviders; }
+    public Set<TemplateConfigProvider> customProviders() { return customProviders; }
 
     /**
      * Set the path to include config snippets from
@@ -138,13 +138,7 @@ public class TemplateConfigBundleConfiguration {
      * Add a custom provider used to add your own variables to the configuration template.
      */
     public TemplateConfigBundleConfiguration withCustomProvider(TemplateConfigProvider customProvider) {
-        if (!this.customProviders.isPresent()) {
-            // Want the set to preserve the order things are inserted into it so we have predictable behavior when keys
-            // have the same names in the template.
-            Set<TemplateConfigProvider> customProviderSet = new LinkedHashSet<>();
-            this.customProviders = Optional.of(customProviderSet);
-        }
-        this.customProviders.get().add(customProvider);
+        this.customProviders.add(customProvider);
         return this;
     }
 }
