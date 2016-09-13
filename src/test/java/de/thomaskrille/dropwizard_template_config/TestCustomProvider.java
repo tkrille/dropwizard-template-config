@@ -3,7 +3,7 @@ package de.thomaskrille.dropwizard_template_config;
 import java.util.HashMap;
 import java.util.Map;
 
-public class TestCustomProvider implements TemplateConfigProvider {
+public class TestCustomProvider implements TemplateConfigVariablesProvider {
     private final String namespace;
     private final Map<String, String> data = new HashMap<>();
 
@@ -21,7 +21,7 @@ public class TestCustomProvider implements TemplateConfigProvider {
     }
 
     @Override
-    public Map<String, String> getDataModel() {
+    public Map<String, String> getVariables() {
         return this.data;
     }
 }

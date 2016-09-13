@@ -34,7 +34,7 @@ class BundleCreationSpec extends Specification {
         def providerA = new TestCustomProvider("providerA")
         def providerB = new TestCustomProvider("providerB")
         def bundle = new TemplateConfigBundle(
-                new TemplateConfigBundleConfiguration().withCustomProvider(providerB).withCustomProvider(providerA)
+                new TemplateConfigBundleConfiguration().addCustomProvider(providerB).addCustomProvider(providerA)
         )
 
         then:

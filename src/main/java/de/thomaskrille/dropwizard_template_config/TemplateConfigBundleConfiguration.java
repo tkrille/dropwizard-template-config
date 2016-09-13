@@ -16,7 +16,7 @@ public class TemplateConfigBundleConfiguration {
     private Optional<String> resourceIncludePath = Optional.absent();
     private Optional<String> fileIncludePath = Optional.absent();
     private Optional<String> outputPath = Optional.absent();
-    private Set<TemplateConfigProvider> customProviders = new LinkedHashSet<>();
+    private Set<TemplateConfigVariablesProvider> customProviders = new LinkedHashSet<>();
 
     /**
      * Get the configured charset (Default: UTF-8)
@@ -69,7 +69,9 @@ public class TemplateConfigBundleConfiguration {
     /**
      * Get the set of custom providers used to add variables to the configuration template (Default: Empty Set)
      */
-    public Set<TemplateConfigProvider> customProviders() { return customProviders; }
+    public Set<TemplateConfigVariablesProvider> customProviders() {
+        return customProviders;
+    }
 
     /**
      * Set the path to include config snippets from
@@ -137,7 +139,7 @@ public class TemplateConfigBundleConfiguration {
     /**
      * Add a custom provider used to add your own variables to the configuration template.
      */
-    public TemplateConfigBundleConfiguration withCustomProvider(TemplateConfigProvider customProvider) {
+    public TemplateConfigBundleConfiguration addCustomProvider(TemplateConfigVariablesProvider customProvider) {
         this.customProviders.add(customProvider);
         return this;
     }

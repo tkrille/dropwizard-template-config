@@ -13,7 +13,7 @@ class CustomProvidersSpec extends Specification {
     def TestSystemPropertiesProvider systemPropertiesProvider = new TestSystemPropertiesProvider()
     def TestCustomProvider customProviderA = new TestCustomProvider("providerA")
     def TestCustomProvider customProviderB = new TestCustomProvider("providerB")
-    def Set<TemplateConfigProvider> customProviders = new HashSet<>([customProviderA, customProviderB])
+    def Set<TemplateConfigVariablesProvider> customProviders = new HashSet<>([customProviderA, customProviderB])
 
     def TemplateConfigurationSourceProvider templateConfigurationSourceProvider =
             new TemplateConfigurationSourceProvider(new TestConfigSourceProvider(),
