@@ -13,6 +13,7 @@ class BundleCreationSpec extends Specification {
         bundle.charset == Charsets.UTF_8
         bundle.resourceIncludePath == Optional.absent()
         bundle.fileIncludePath == Optional.absent()
+        bundle.customProviders.size() == 0
     }
 
     def 'a specific configuration can be applied'() {
@@ -26,5 +27,18 @@ class BundleCreationSpec extends Specification {
         then:
         bundle.charset == Charsets.US_ASCII
         bundle.resourceIncludePath.get() == 'includePath'
+    }
+
+    def 'custom providers can be added'() {
+        when:
+        def providerA = new TestCustomProvider("providerA")
+        def providerB = new TestCustomProvider("providerB")
+        def bundle = new TemplateConfigBundle(
+                new TemplateConfigBundleConfiguration().addCustomProvider(providerB).addCustomProvider(providerA)
+        )
+
+        then:
+        bundle.customProviders.containsAll([providerA, providerB])
+        bundle.customProviders.size() == 2
     }
 }

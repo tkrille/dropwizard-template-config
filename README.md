@@ -40,6 +40,22 @@ public void initialize(final Bootstrap<Configuration> bootstrap) {
 }
 ```
 
+You can add your own variables to the template by adding your own implementations of the `TemplateConfigProvider`
+to the constructor:
+
+```java
+@Override
+public void initialize(final Bootstrap<Configuration> bootstrap) {
+    ...
+    bootstrap.addBundle(new TemplateConfigBundle(
+        new TemplateConfigBundleConfiguration()
+            .withCustomProvider(myCustomProvider1)
+            .withCustomProvider(myCustomProvider2)
+    ));
+    ...
+}
+```
+
 Look at `TemplateConfigBundleConfiguration`'s javadoc to see all available options.
 
 **Heads up:** The Bundle gets the content of the `config.yaml` by wrapping any previously defined
