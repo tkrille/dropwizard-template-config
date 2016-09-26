@@ -16,6 +16,9 @@ First add the dependency to your POM:
 </dependency>
 ```
 
+Your project is assumed to separately pull in `dropwizard-core` version 0.7.1 or newer.
+Compatibility has been tested through Dropwizard 1.0.0.
+
 To enable, simply add the `TemplateConfigBundle` to the `Bootstrap` object in your `initialize` method:
 
 ```java
