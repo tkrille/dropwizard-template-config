@@ -13,9 +13,9 @@ import java.util.Set;
 public class TemplateConfigBundleConfiguration {
 
     private Charset charset = Charsets.UTF_8;
-    private Optional<String> resourceIncludePath = Optional.absent();
-    private Optional<String> fileIncludePath = Optional.absent();
-    private Optional<String> outputPath = Optional.absent();
+    private String resourceIncludePath;
+    private String fileIncludePath;
+    private String outputPath;
     private Set<TemplateConfigVariablesProvider> customProviders = new LinkedHashSet<>();
 
     /**
@@ -42,28 +42,28 @@ public class TemplateConfigBundleConfiguration {
      */
     @Deprecated
     public Optional<String> includePath() {
-        return resourceIncludePath;
+        return Optional.fromNullable(resourceIncludePath);
     }
 
     /**
      * Get the configured resource include path (Default: None)
      */
     public Optional<String> resourceIncludePath() {
-        return resourceIncludePath;
+        return Optional.fromNullable(resourceIncludePath);
     }
 
     /**
      * Get the configured file include path (Default: None)
      */
     public Optional<String> fileIncludePath() {
-        return fileIncludePath;
+        return Optional.fromNullable(fileIncludePath);
     }
 
     /**
      * Get the configured output path for the processed config (Default: None)
      */
     public Optional<String> outputPath() {
-        return outputPath;
+        return Optional.fromNullable(outputPath);
     }
 
     /**
@@ -82,7 +82,8 @@ public class TemplateConfigBundleConfiguration {
      */
     @Deprecated
     public TemplateConfigBundleConfiguration includePath(String includePath) {
-        this.resourceIncludePath = Optional.of(includePath);
+        resourceIncludePath = includePath;
+        fileIncludePath = null;
         return this;
     }
 
@@ -96,13 +97,13 @@ public class TemplateConfigBundleConfiguration {
      * @throws IllegalStateException if fileIncludePath is set
      */
     public TemplateConfigBundleConfiguration resourceIncludePath(String path) {
-        if (this.fileIncludePath.isPresent()) {
+        if (fileIncludePath != null) {
             throw new IllegalStateException(
                 "A value for fileIncludePath is already present; " +
                 "only one of resourceIncludePath or fileIncludePath may be specified."
             );
         }
-        this.resourceIncludePath = Optional.of(path);
+        this.resourceIncludePath = path;
         return this;
     }
 
@@ -116,13 +117,13 @@ public class TemplateConfigBundleConfiguration {
      * @throws IllegalStateException if resourceIncludePath is already set
      */
     public TemplateConfigBundleConfiguration fileIncludePath(String path) {
-        if (this.resourceIncludePath.isPresent()) {
+        if (resourceIncludePath != null) {
             throw new IllegalStateException(
                 "A value for resourceIncludePath is already present; " +
                 "only one of resourceIncludePath or fileIncludePath may be specified."
             );
         }
-        this.fileIncludePath = Optional.of(path);
+        this.fileIncludePath = path;
         return this;
     }
 
@@ -132,7 +133,7 @@ public class TemplateConfigBundleConfiguration {
      * <p>Must not be {@code null}. By default there's no value set.
      */
     public TemplateConfigBundleConfiguration outputPath(String outputPath) {
-        this.outputPath = Optional.of(outputPath);
+        this.outputPath = outputPath;
         return this;
     }
 

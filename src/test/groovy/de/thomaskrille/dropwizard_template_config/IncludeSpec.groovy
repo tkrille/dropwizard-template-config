@@ -1,27 +1,31 @@
 package de.thomaskrille.dropwizard_template_config
 
-import com.google.common.base.*
 import org.apache.commons.io.IOUtils
+import spock.lang.Shared
 import spock.lang.Specification
 
 class IncludeSpec extends Specification {
 
-    def static TestEnvironmentProvider environmentProvider = new TestEnvironmentProvider()
+    @Shared
+    def TestEnvironmentProvider environmentProvider = new TestEnvironmentProvider()
 
-    def static TemplateConfigurationSourceProvider providerWithResourceIncludePath =
-            new TemplateConfigurationSourceProvider(new TestConfigSourceProvider(),
-                    environmentProvider,
-                    new DefaultSystemPropertiesProvider(),
-                    Charsets.UTF_8,
-                    Optional.of("/config-snippets"), Optional.absent(), Optional.absent(), new LinkedHashSet<>())
+    @Shared
+    def TemplateConfigurationSourceProvider resourceIncludeProvider = new TemplateConfigurationSourceProvider(
+            new TestConfigSourceProvider(),
+            environmentProvider,
+            new DefaultSystemPropertiesProvider(),
+            new TemplateConfigBundleConfiguration()
+                    .resourceIncludePath('/config-snippets')
+    )
 
-    def static TemplateConfigurationSourceProvider providerWithFileIncludePath =
-            new TemplateConfigurationSourceProvider(new TestConfigSourceProvider(),
-                    environmentProvider,
-                    new DefaultSystemPropertiesProvider(),
-                    Charsets.UTF_8,
-                    Optional.absent(), Optional.of("src/test/resources/config-snippets/"), Optional.absent(),
-                    new LinkedHashSet<>())
+    @Shared
+    def TemplateConfigurationSourceProvider fileIncludeProvider = new TemplateConfigurationSourceProvider(
+            new TestConfigSourceProvider(),
+            environmentProvider,
+            new DefaultSystemPropertiesProvider(),
+            new TemplateConfigBundleConfiguration()
+                    .fileIncludePath('src/test/resources/config-snippets/')
+    )
 
     def 'config snippets can be included from the classpath and filesystem'() {
         given:
@@ -59,10 +63,10 @@ class IncludeSpec extends Specification {
                 '''.stripIndent()
 
         where:
-        provider << [providerWithResourceIncludePath, providerWithFileIncludePath]
+        provider << [resourceIncludeProvider, fileIncludeProvider]
     }
 
-    def 'config snippets can use templating features'(){
+    def 'config snippets can use templating features'() {
         given:
         def config = '''
                 <#include "database-with-templating.yaml">
@@ -85,24 +89,25 @@ class IncludeSpec extends Specification {
                 '''.stripIndent()
 
         where:
-        provider << [providerWithResourceIncludePath, providerWithFileIncludePath]
+        provider << [resourceIncludeProvider, fileIncludeProvider]
     }
 
-    def 'relative resource include paths will be interpreted as absolute'(){
+    def 'relative resource include paths will be interpreted as absolute'() {
         given:
-        def relativeIncludePath = "config-snippets"
-        def TemplateConfigurationSourceProvider templateConfigurationSourceProvider =
-                new TemplateConfigurationSourceProvider(new TestConfigSourceProvider(),
-                        new DefaultEnvironmentProvider(),
-                        new DefaultSystemPropertiesProvider(),
-                        Charsets.UTF_8, Optional.of(relativeIncludePath), Optional.absent(), Optional.absent(),
-                        new LinkedHashSet<>())
+        def relativeIncludePath = 'config-snippets'
+        def TemplateConfigurationSourceProvider provider = new TemplateConfigurationSourceProvider(
+                new TestConfigSourceProvider(),
+                new DefaultEnvironmentProvider(),
+                new DefaultSystemPropertiesProvider(),
+                new TemplateConfigBundleConfiguration()
+                        .resourceIncludePath(relativeIncludePath)
+        )
         def config = '''
                 <#include "database.yaml">
                 '''.stripIndent()
 
         when:
-        def parsedConfig = templateConfigurationSourceProvider.open(config)
+        def parsedConfig = provider.open(config)
 
         then:
         def parsedConfigAsString = IOUtils.toString(parsedConfig)
@@ -115,7 +120,7 @@ class IncludeSpec extends Specification {
                 '''.stripIndent()
     }
 
-    def 'specifying file and then resource include paths fails'(){
+    def 'specifying file and then resource include paths fails'() {
         given:
         def TemplateConfigBundleConfiguration config =
                 new TemplateConfigBundleConfiguration()
@@ -127,7 +132,7 @@ class IncludeSpec extends Specification {
         thrown(IllegalStateException)
     }
 
-    def 'specifying resource and then file include paths fails'(){
+    def 'specifying resource and then file include paths fails'() {
         given:
         def TemplateConfigBundleConfiguration config =
                 new TemplateConfigBundleConfiguration()

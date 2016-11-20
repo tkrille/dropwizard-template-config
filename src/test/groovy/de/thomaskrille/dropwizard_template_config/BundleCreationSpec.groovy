@@ -10,10 +10,10 @@ class BundleCreationSpec extends Specification {
         def bundle = new TemplateConfigBundle()
 
         then:
-        bundle.charset == Charsets.UTF_8
-        bundle.resourceIncludePath == Optional.absent()
-        bundle.fileIncludePath == Optional.absent()
-        bundle.customProviders.size() == 0
+        bundle.configuration.charset == Charsets.UTF_8
+        bundle.configuration.resourceIncludePath == null
+        bundle.configuration.fileIncludePath == null
+        bundle.configuration.customProviders.size() == 0
     }
 
     def 'a specific configuration can be applied'() {
@@ -25,8 +25,8 @@ class BundleCreationSpec extends Specification {
         )
 
         then:
-        bundle.charset == Charsets.US_ASCII
-        bundle.resourceIncludePath.get() == 'includePath'
+        bundle.configuration.charset == Charsets.US_ASCII
+        bundle.configuration.resourceIncludePath == 'includePath'
     }
 
     def 'custom providers can be added'() {
@@ -34,11 +34,13 @@ class BundleCreationSpec extends Specification {
         def providerA = new TestCustomProvider("providerA")
         def providerB = new TestCustomProvider("providerB")
         def bundle = new TemplateConfigBundle(
-                new TemplateConfigBundleConfiguration().addCustomProvider(providerB).addCustomProvider(providerA)
+                new TemplateConfigBundleConfiguration()
+                        .addCustomProvider(providerB)
+                        .addCustomProvider(providerA)
         )
 
         then:
-        bundle.customProviders.containsAll([providerA, providerB])
-        bundle.customProviders.size() == 2
+        bundle.configuration.customProviders.containsAll([providerA, providerB])
+        bundle.configuration.customProviders.size() == 2
     }
 }

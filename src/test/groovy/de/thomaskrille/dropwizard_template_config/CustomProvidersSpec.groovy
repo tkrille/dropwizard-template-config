@@ -1,7 +1,5 @@
 package de.thomaskrille.dropwizard_template_config
 
-import com.google.common.base.Charsets
-import com.google.common.base.Optional
 import org.apache.commons.io.IOUtils
 import spock.lang.Specification
 
@@ -13,14 +11,15 @@ class CustomProvidersSpec extends Specification {
     def TestSystemPropertiesProvider systemPropertiesProvider = new TestSystemPropertiesProvider()
     def TestCustomProvider customProviderA = new TestCustomProvider("providerA")
     def TestCustomProvider customProviderB = new TestCustomProvider("providerB")
-    def Set<TemplateConfigVariablesProvider> customProviders = new HashSet<>([customProviderA, customProviderB])
+    def TemplateConfigBundleConfiguration templateConfigBundleConfiguration = new TemplateConfigBundleConfiguration()
+            .addCustomProvider(customProviderA)
+            .addCustomProvider(customProviderB)
 
     def TemplateConfigurationSourceProvider templateConfigurationSourceProvider =
             new TemplateConfigurationSourceProvider(new TestConfigSourceProvider(),
                     environmentProvider,
                     systemPropertiesProvider,
-                    Charsets.UTF_8, Optional.absent(), Optional.absent(), Optional.absent(),
-                    customProviders)
+                    templateConfigBundleConfiguration)
 
     def 'replacing custom variables inline works'() {
         given:

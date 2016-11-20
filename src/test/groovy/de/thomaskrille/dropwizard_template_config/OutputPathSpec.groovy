@@ -1,7 +1,6 @@
 package de.thomaskrille.dropwizard_template_config
 
-import com.google.common.base.Charsets
-import com.google.common.base.Optional
+import com.google.common.base.*
 import com.google.common.io.Files
 import org.apache.commons.io.IOUtils
 import spock.lang.Specification
@@ -14,12 +13,13 @@ class OutputPathSpec extends Specification {
 
     def outputPath = System.getProperty('java.io.tmpdir') + '/outputPathSpec.yml'
 
-    def TemplateConfigurationSourceProvider templateConfigurationSourceProvider =
-            new TemplateConfigurationSourceProvider(new TestConfigSourceProvider(),
-                    environmentProvider,
-                    new DefaultSystemPropertiesProvider(),
-                    Charsets.UTF_8, Optional.absent(), Optional.absent(), Optional.of(outputPath),
-                    new LinkedHashSet<>())
+    def TemplateConfigurationSourceProvider provider = new TemplateConfigurationSourceProvider(
+            new TestConfigSourceProvider(),
+            environmentProvider,
+            new DefaultSystemPropertiesProvider(),
+            new TemplateConfigBundleConfiguration()
+                    .outputPath(outputPath)
+    )
 
     def 'rendered output is written to configured outputPath'() {
         given:
@@ -31,7 +31,7 @@ class OutputPathSpec extends Specification {
                 '''
 
         when:
-        def parsedConfig = templateConfigurationSourceProvider.open(config)
+        def parsedConfig = provider.open(config)
         def parsedConfigAsString = IOUtils.toString(parsedConfig)
         def configOnDiskAsString = Files.toString(new File(outputPath), Charsets.UTF_8)
 

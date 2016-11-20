@@ -1,11 +1,10 @@
 package de.thomaskrille.dropwizard_template_config
 
-import com.google.common.base.Charsets
-import com.google.common.base.Optional
 import org.apache.commons.io.IOUtils
 import spock.lang.Specification
 
-import static org.hamcrest.CoreMatchers.*
+import static org.hamcrest.CoreMatchers.containsString
+import static org.hamcrest.CoreMatchers.not
 
 class AdditionalFreemarkerFeaturesSpec extends Specification {
 
@@ -15,7 +14,7 @@ class AdditionalFreemarkerFeaturesSpec extends Specification {
             new TemplateConfigurationSourceProvider(new TestConfigSourceProvider(),
                     environmentProvider,
                     new DefaultSystemPropertiesProvider(),
-                    Charsets.UTF_8, Optional.absent(), Optional.absent(), Optional.absent(), new LinkedHashSet<>())
+                    new TemplateConfigBundleConfiguration())
 
     def 'conditionally enable https - on'() {
         given:
