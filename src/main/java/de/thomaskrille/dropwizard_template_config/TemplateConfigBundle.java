@@ -31,17 +31,6 @@ public class TemplateConfigBundle implements Bundle {
     }
 
     /**
-     * Create a {@link TemplateConfigBundle} using the given {@link Charset}.
-     *
-     * @param charset The {@link Charset} used to load, process, and output the config template.
-     * @deprecated Use {@link TemplateConfigBundle#TemplateConfigBundle(TemplateConfigBundleConfiguration)} instead.
-     */
-    @Deprecated
-    public TemplateConfigBundle(final Charset charset) {
-        this(new TemplateConfigBundleConfiguration().charset(charset));
-    }
-
-    /**
      * Create a {@link TemplateConfigBundle} using the given {@link TemplateConfigBundleConfiguration}.
      *
      * @param configuration The configuration for the new bundle. See {@link TemplateConfigBundleConfiguration}.

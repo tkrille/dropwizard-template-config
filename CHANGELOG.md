@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.5.0
+
+### Changes
+
+- Remove deprecated constructor `TemplateConfigBundle(java.nio.charset.Charset)`.
+
 ## 1.4.0 (2016-05-21)
 
 ### Features
