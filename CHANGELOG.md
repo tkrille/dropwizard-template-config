@@ -2,6 +2,12 @@
 
 ## 1.5.0
 
+### Features
+
+- Add ability to define custom variables. Use
+  `TemplateConfigBundleConfiguration.addCustomProvider(TemplateConfigVariablesProvider customProvider)`
+  to add your custom variables provider. See the [tutorial](README.md#tutorial) for details.
+
 ### Changes
 
 - Remove deprecated constructor `TemplateConfigBundle(java.nio.charset.Charset)`.
