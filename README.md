@@ -52,8 +52,8 @@ public void initialize(final Bootstrap<Configuration> bootstrap) {
     ...
     bootstrap.addBundle(new TemplateConfigBundle(
         new TemplateConfigBundleConfiguration()
-            .withCustomProvider(myCustomProvider1)
-            .withCustomProvider(myCustomProvider2)
+            .addCustomProvider(myCustomProvider1)
+            .addCustomProvider(myCustomProvider2)
     ));
     ...
 }
