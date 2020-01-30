@@ -54,6 +54,8 @@ public void initialize(final Bootstrap<Configuration> bootstrap) {
         new TemplateConfigBundleConfiguration()
             .addCustomProvider(myCustomProvider1)
             .addCustomProvider(myCustomProvider2)
+            .addCustomHashesProvider(myCustommHashesProvider2)
+            .addCustomHashesProvider(myCustommHashesProvider2)
     ));
     ...
 }

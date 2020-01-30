@@ -11,9 +11,13 @@ class CustomProvidersSpec extends Specification {
     def TestSystemPropertiesProvider systemPropertiesProvider = new TestSystemPropertiesProvider()
     def TestCustomProvider customProviderA = new TestCustomProvider("providerA")
     def TestCustomProvider customProviderB = new TestCustomProvider("providerB")
+    def TestCustomHashesProvider customHashesProviderA = new TestCustomHashesProvider("providerHashesA")
+    def TestCustomHashesProvider customHashesProviderB = new TestCustomHashesProvider("providerHashesB")
     def TemplateConfigBundleConfiguration templateConfigBundleConfiguration = new TemplateConfigBundleConfiguration()
             .addCustomProvider(customProviderA)
             .addCustomProvider(customProviderB)
+            .addCustomHashesProvider(customHashesProviderA)
+            .addCustomHashesProvider(customHashesProviderB)
 
     def TemplateConfigurationSourceProvider templateConfigurationSourceProvider =
             new TemplateConfigurationSourceProvider(new TestConfigSourceProvider(),
@@ -27,11 +31,13 @@ class CustomProvidersSpec extends Specification {
                           driverClass: org.postgresql.Driver
                           user: ${DB_USER}
                           password: ${DB_PASSWORD}
-                          url: jdbc:postgresql://${providerA.DB_HOST}:${providerB.DB_PORT}/my-app-db'''
+                          url: jdbc:${providerHashesB.DB_RDBMS}://${providerA.DB_HOST}:${providerB.DB_PORT}/${providerHashesA.DB_APP_NAME}'''
         customProviderA.put('DB_USER', 'user')
         customProviderB.put('DB_PASSWORD', 'password')
         customProviderA.put('DB_HOST', 'db-host')
         customProviderB.put('DB_PORT', '12345')
+        customHashesProviderA.put('DB_APP_NAME', 'my-app-db')
+        customHashesProviderB.put('DB_RDBMS', 'postgresql')
 
         when:
         InputStream parsedConfig = templateConfigurationSourceProvider.open(config)

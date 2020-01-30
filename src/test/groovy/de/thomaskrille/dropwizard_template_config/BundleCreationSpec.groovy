@@ -33,14 +33,20 @@ class BundleCreationSpec extends Specification {
         when:
         def providerA = new TestCustomProvider("providerA")
         def providerB = new TestCustomProvider("providerB")
+        def providerHashesA = new TestCustomHashesProvider("providerHashesA")
+        def providerHashesB = new TestCustomHashesProvider("providerHashesB")
         def bundle = new TemplateConfigBundle(
                 new TemplateConfigBundleConfiguration()
                         .addCustomProvider(providerB)
                         .addCustomProvider(providerA)
+                        .addCustomHashesProvider(providerHashesA)
+                        .addCustomHashesProvider(providerHashesB)
         )
 
         then:
         bundle.configuration.customProviders.containsAll([providerA, providerB])
         bundle.configuration.customProviders.size() == 2
+        bundle.configuration.customHashesProviders.containsAll([providerHashesA, providerHashesB])
+        bundle.configuration.customHashesProviders.size() == 2
     }
 }

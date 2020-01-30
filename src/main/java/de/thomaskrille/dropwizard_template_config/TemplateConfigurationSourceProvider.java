@@ -92,10 +92,16 @@ public class TemplateConfigurationSourceProvider implements ConfigurationSourceP
         for (TemplateConfigVariablesProvider customProvider : configuration.customProviders()) {
             dataModel.putAll(customProvider.getVariables());
         }
+        for (TemplateConfigHashesProvider customHashesProvider : configuration.customHashesProviders()) {
+            dataModel.putAll(customHashesProvider.getHashes());
+        }
         dataModel.put("env", environmentProvider.getEnvironment());
         dataModel.put("sys", systemPropertiesProvider.getSystemProperties());
         for (TemplateConfigVariablesProvider customProvider : configuration.customProviders()) {
             dataModel.put(customProvider.getNamespace(), customProvider.getVariables());
+        }
+        for (TemplateConfigHashesProvider customHashesProvider : configuration.customHashesProviders()) {
+            dataModel.put(customHashesProvider.getNamespace(), customHashesProvider.getHashes());
         }
         return dataModel;
     }

@@ -17,6 +17,7 @@ public class TemplateConfigBundleConfiguration {
     private String fileIncludePath;
     private String outputPath;
     private Set<TemplateConfigVariablesProvider> customProviders = new LinkedHashSet<>();
+    private Set<TemplateConfigHashesProvider> customHashesProviders = new LinkedHashSet<>();
 
     /**
      * Get the configured charset (Default: UTF-8)
@@ -71,6 +72,13 @@ public class TemplateConfigBundleConfiguration {
      */
     public Set<TemplateConfigVariablesProvider> customProviders() {
         return customProviders;
+    }
+
+    /**
+     * Get the set of custom hashes providers used to add hashes to the configuration template (Default: Empty Set)
+     */
+    public Set<TemplateConfigHashesProvider> customHashesProviders() {
+        return customHashesProviders;
     }
 
     /**
@@ -142,6 +150,14 @@ public class TemplateConfigBundleConfiguration {
      */
     public TemplateConfigBundleConfiguration addCustomProvider(TemplateConfigVariablesProvider customProvider) {
         this.customProviders.add(customProvider);
+        return this;
+    }
+
+    /**
+     * Add a custom hashes provider used to add your own hashes to the configuration template.
+     */
+    public TemplateConfigBundleConfiguration addCustomHashesProvider(TemplateConfigHashesProvider customHashesProvider) {
+        this.customHashesProviders.add(customHashesProvider);
         return this;
     }
 }
