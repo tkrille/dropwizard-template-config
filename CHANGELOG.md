@@ -1,5 +1,16 @@
 # Changelog
 
+## 2.0.0
+
+### Changes
+
+- Rename artifact groupId from `de.thomaskrille` to `com.expediagroup.dropwizard`
+- Rename package from `de/thomaskrille/dropwizard_template_config` to `com/expediagroup/dropwizard/bundle/configuration/freemarker`
+
+### Removed
+
+- Removed shaded freemarker classes
+
 ## 1.5.0 (2017-02-19)
 
 ### Features

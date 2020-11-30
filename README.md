@@ -1,8 +1,10 @@
-# Dropwizard Template Config [![Circle CI](https://circleci.com/gh/tkrille/dropwizard-template-config/tree/master.svg?style=svg)](https://circleci.com/gh/tkrille/dropwizard-template-config/tree/master)
+# Dropwizard Template Config
 
 A Dropwizard Bundle that allows you to write your `config.yaml` as a [Freemarker](http://freemarker.org) template.
 This is especially useful when you need to access environment variables or system properties.
 In fact, this project is the successor to the fabulous [dropwizard-environment-config](https://github.com/tkrille/dropwizard-environment-config) plugin.
+
+**This project is fork of [tkrille/dropwizard-template-config](https://github.com/tkrille/dropwizard-template-config)**
 
 ## Setup
 
@@ -10,9 +12,9 @@ First add the dependency to your POM:
 
 ```xml
 <dependency>
-    <groupId>de.thomaskrille</groupId>
+    <groupId>com.expediagroup.dropwizard</groupId>
     <artifactId>dropwizard-template-config</artifactId>
-    <version>1.5.0</version>
+    <version>2.0.0</version>
 </dependency>
 ```
 
